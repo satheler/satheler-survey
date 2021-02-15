@@ -1,0 +1,11 @@
+{
+  "name": "satheler-survey",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/satheler/satheler-survey",
+    "type": "git"
+  },
+  "author": "Gustavo Bittencourt Satheler <gustavosatheler@gmail.com>",
+  "license": "MIT"
+}
