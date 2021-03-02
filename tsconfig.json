@@ -12,6 +12,5 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "strictNullChecks": false,
-    "baseUrl": "."
   }
 }
