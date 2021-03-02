@@ -1,6 +1,6 @@
 import { SignUpController } from '../../../app/controllers/SignUpController'
 import { MissingParamError, InvalidParamError, InternalServerError } from '../../../app/errors'
-import { EmailValidator } from '../../../contracts/validator'
+import { EmailValidator } from '../../../contracts'
 
 type SutTypes = {
   sut: SignUpController

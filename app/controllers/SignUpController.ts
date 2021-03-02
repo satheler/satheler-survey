@@ -1,6 +1,4 @@
-import { Controller } from '../../contracts/controller'
-import { HttpRequest, HttpResponse } from '../../contracts/http'
-import { EmailValidator } from '../../contracts/validator'
+import { Controller, EmailValidator, HttpRequest, HttpResponse } from '../../contracts'
 import { InvalidParamError, MissingParamError } from '../errors'
 import { badRequest, internalServerError } from '../helpers/HttpHelper'
 
