@@ -7,7 +7,7 @@
     "sourceMap": true,
     "strict": true,
     "allowJs": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
