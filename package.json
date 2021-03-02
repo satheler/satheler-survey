@@ -1,6 +1,6 @@
 {
   "name": "satheler-survey",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "index.js",
   "author": "Gustavo Bittencourt Satheler <gustavosatheler@gmail.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test:staged": "jest"
+    "test:staged": "jest --passWithNoTests"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
