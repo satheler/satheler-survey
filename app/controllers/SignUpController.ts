@@ -1,10 +1,9 @@
 import { Controller } from '../../contracts/controller'
 import { HttpRequest, HttpResponse } from '../../contracts/http'
 import { EmailValidator } from '../../contracts/validator'
-import { InternalServerError } from '../errors/InternalServerError'
 import { InvalidParamError } from '../errors/InvalidParamError'
 import { MissingParamError } from '../errors/MissingParamError'
-import { badRequest } from '../helpers/HttpHelper'
+import { badRequest, internalServerError } from '../helpers/HttpHelper'
 
 export class SignUpController implements Controller {
   constructor (
@@ -26,10 +25,7 @@ export class SignUpController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: new InternalServerError()
-      }
+      return internalServerError()
     }
   }
 }
