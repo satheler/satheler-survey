@@ -2,7 +2,7 @@ import { Controller, HttpRequest, HttpResponse } from '../../../contracts'
 import { EmailValidator } from '../../../contracts/validator'
 import { AddAccount } from '../../domain/usecases/AddAccount'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, internalServerError } from '../../helpers/HttpHelper'
+import { badRequest, internalServerError, ok } from '../../helpers/HttpHelper'
 
 export class SignUpController implements Controller {
   constructor (
@@ -33,10 +33,7 @@ export class SignUpController implements Controller {
 
       const account = this.addAccount.add({ name, email, password })
 
-      return {
-        statusCode: 200,
-        body: account
-      }
+      return ok(account)
     } catch (error) {
       return internalServerError()
     }
