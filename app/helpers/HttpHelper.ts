@@ -1,4 +1,4 @@
-import { HttpResponse } from '../../contracts/http'
+import { HttpResponse } from '../../contracts'
 import { InternalServerError } from '../errors'
 
 export const ok = (body: any): HttpResponse => ({
