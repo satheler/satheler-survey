@@ -1,7 +1,8 @@
 import { DatabaseAddAccount } from '../../../../app/data/usecases/Account/DatabaseAddAccount'
+import { Encrypter } from '../../../../contracts/encrypter'
 
-const makeEncrypterStub = (): any => {
-  class EncrypterStub {
+const makeEncrypterStub = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
     async encrypt (value: string): Promise<string> {
       return await new Promise((resolve, reject) => resolve('hashed_password'))
     }
