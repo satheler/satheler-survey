@@ -1,5 +1,5 @@
 import { HttpResponse } from '../../contracts/http'
-import { InternalServerError } from '../errors/InternalServerError'
+import { InternalServerError } from '../errors'
 
 export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
