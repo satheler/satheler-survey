@@ -1,5 +1,5 @@
 import { SignUpController } from '../../../app/controllers/Account/SignUpController'
-import { AddAccount, AddAccountParams } from '../../../app/domain/usecases/AddAccount'
+import { AddAccount, AddAccountParams } from '../../../app/domain/usecases/Account/AddAccount'
 import { MissingParamError, InvalidParamError, InternalServerError } from '../../../app/errors'
 import { Account } from '../../../app/models/Account'
 import { EmailValidator } from '../../../contracts/validator'

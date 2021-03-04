@@ -1,6 +1,6 @@
 import { Controller, HttpRequest, HttpResponse } from '../../../contracts'
 import { EmailValidator } from '../../../contracts/validator'
-import { AddAccount } from '../../domain/usecases/AddAccount'
+import { AddAccount } from '../../domain/usecases/Account/AddAccount'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, internalServerError, ok } from '../../helpers/HttpHelper'
 
