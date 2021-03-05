@@ -1,4 +1,6 @@
+import { AddAccountRepository } from '../../../../app/data/contracts/AddAccountRepository'
 import { DatabaseAddAccount } from '../../../../app/data/usecases/Account/DatabaseAddAccount'
+import { Account } from '../../../../app/models/Account'
 import { Encrypter } from '../../../../contracts'
 
 const makeEncrypterStub = (): Encrypter => {
@@ -8,15 +10,38 @@ const makeEncrypterStub = (): Encrypter => {
     }
   }
 
-  const encrypterStub = new EncrypterStub()
-  return encrypterStub
+  return new EncrypterStub()
 }
 
-const makeSut = (): any => {
-  const encrypterStub = makeEncrypterStub()
-  const sut = new DatabaseAddAccount(encrypterStub)
+const makeAddAccountRepositoryStub = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add (account: Account): Promise<Account> {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid@mail.com',
+        password: 'hashed_password'
+      }
 
-  return { sut, encrypterStub }
+      return fakeAccount
+    }
+  }
+
+  return new AddAccountRepositoryStub()
+}
+
+type SutTypes = {
+  sut: DatabaseAddAccount
+  encrypterStub: Encrypter
+  addAccountRepositoryStub: AddAccountRepository
+}
+
+const makeSut = (): SutTypes => {
+  const encrypterStub = makeEncrypterStub()
+  const addAccountRepositoryStub = makeAddAccountRepositoryStub()
+  const sut = new DatabaseAddAccount(encrypterStub, addAccountRepositoryStub)
+
+  return { sut, encrypterStub, addAccountRepositoryStub }
 }
 
 describe('DatabaseAddAccount Usecase', () => {
@@ -44,5 +69,23 @@ describe('DatabaseAddAccount Usecase', () => {
 
     const accountPromise = sut.add(accountData)
     await expect(accountPromise).rejects.toThrow()
+  })
+
+  test('Should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid@mail.com',
+      password: 'valid_password'
+    }
+
+    await sut.add(accountData)
+    expect(addSpy).toHaveBeenCalledWith({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid@mail.com',
+      password: 'hashed_password'
+    })
   })
 })
