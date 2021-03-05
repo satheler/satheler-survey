@@ -14,7 +14,7 @@ describe('Account DynamoDb Repository', () => {
     })
   })
 
-  test('Should return an account on succes', async () => {
+  test('Should return an account on success', async () => {
     const sut = makeSut()
     const account = await sut.add({
       id: 'any_id',
