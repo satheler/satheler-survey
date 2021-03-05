@@ -1,7 +1,16 @@
 import request from 'supertest'
+import { DynamoDbHelper } from '../../../lib/database/dynamodb/helpers/DynamoDbHelper'
 import app from '../../../start/config/app'
 
 describe('Account Routes', () => {
+  beforeEach(() => {
+    DynamoDbHelper.connect({
+      endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,
+      sslEnabled: false,
+      region: 'local'
+    })
+  })
+
   describe('SignUp', () => {
     test('Should return an account on success', async () => {
       await request(app)
