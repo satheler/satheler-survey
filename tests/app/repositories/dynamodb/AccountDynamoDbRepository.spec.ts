@@ -1,5 +1,5 @@
-import { AccountDynamoDbRepository } from '../../../../../lib/database/dynamodb/repositories/AccountDynamoDbRepository'
-import { DynamoDbHelper } from '../../../../../lib/database/dynamodb/helpers/DynamoDbHelper'
+import { AccountDynamoDbRepository } from '../../../../app/repositories/dynamodb/AccountRepository'
+import { DynamoDbHelper } from '../../../../lib/database/dynamodb/DynamoDbHelper'
 
 const makeSut = (): AccountDynamoDbRepository => {
   return new AccountDynamoDbRepository()

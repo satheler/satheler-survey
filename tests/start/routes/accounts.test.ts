@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { DynamoDbHelper } from '../../../lib/database/dynamodb/helpers/DynamoDbHelper'
+import { DynamoDbHelper } from '../../../lib/database/dynamodb/DynamoDbHelper'
 import app from '../../../start/config/app'
 
 describe('Account Routes', () => {

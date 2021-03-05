@@ -1,4 +1,4 @@
-import { DynamoDbHelper } from '../lib/database/dynamodb/helpers/DynamoDbHelper'
+import { DynamoDbHelper } from '../lib/database/dynamodb/DynamoDbHelper'
 import app from './config/app'
 import env from './config/env'
 
