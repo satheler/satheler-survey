@@ -1,9 +1,9 @@
-import { CreateAccountController } from '../../../app/controllers/account/CreateAccountController'
-import { AddAccount, AddAccountParams } from '../../../app/domain/usecases/Account/AddAccount'
-import { MissingParamError, InvalidParamError, InternalServerError } from '../../../app/errors'
-import { httpResponseHelper } from '../../../app/helpers/HttpHelper'
-import { Account } from '../../../app/models/Account'
-import { EmailValidator } from '../../../contracts'
+import { CreateAccountController } from '../../../../app/controllers/account/CreateAccountController'
+import { AddAccount, AddAccountParams } from '../../../../app/domain/usecases/Account/AddAccount'
+import { MissingParamError, InvalidParamError, InternalServerError } from '../../../../app/errors'
+import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
+import { Account } from '../../../../app/models/Account'
+import { EmailValidator } from '../../../../contracts'
 
 type SutTypes = {
   sut: CreateAccountController
