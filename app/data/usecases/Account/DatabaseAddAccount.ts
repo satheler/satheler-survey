@@ -9,11 +9,11 @@ export class DatabaseAddAccount implements AddAccount {
     private readonly addAccountRepository: AddAccountRepository
   ) { }
 
-  async add ({ password, ...account }: AddAccountParams): Promise<Account> {
+  async add ({ password, ...accountData }: AddAccountParams): Promise<Account> {
     const hashedPassword = await this.encrypter.encrypt(password)
 
-    const accountWithHashedPassword = Object.assign({ id: 'valid_id' }, account, { password: hashedPassword })
-    await this.addAccountRepository.add(accountWithHashedPassword)
-    return null
+    const account = Object.assign({ id: 'valid_id' }, accountData, { password: hashedPassword })
+    await this.addAccountRepository.add(account)
+    return account
   }
 }
