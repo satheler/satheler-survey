@@ -1,4 +1,6 @@
+import { DynamoDbHelper } from '../lib/database/dynamodb/helpers/DynamoDbHelper'
 import app from './config/app'
+import env from './config/env'
 
-const PORT = 8000
-app.listen(PORT, () => console.log(`⚡️ Server running at http://localhost:${PORT}`))
+DynamoDbHelper.connect({ endpoint: env.LOCALSTACK_ENDPOINT, sslEnabled: false, region: 'local' })
+app.listen(env.PORT, () => console.log(`⚡️ Server running at http://localhost:${env.PORT}`))
