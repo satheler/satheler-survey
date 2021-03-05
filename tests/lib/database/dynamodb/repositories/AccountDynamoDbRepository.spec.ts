@@ -1,6 +1,10 @@
 import { AccountDynamoDbRepository } from '../../../../../lib/database/dynamodb/repositories/AccountDynamoDbRepository'
 import { DynamoDbHelper } from '../../../../../lib/database/dynamodb/helpers/DynamoDbHelper'
 
+const makeSut = (): AccountDynamoDbRepository => {
+  return new AccountDynamoDbRepository()
+}
+
 describe('Account DynamoDb Repository', () => {
   beforeEach(() => {
     DynamoDbHelper.connect({
@@ -11,7 +15,7 @@ describe('Account DynamoDb Repository', () => {
   })
 
   test('Should return an account on succes', async () => {
-    const sut = new AccountDynamoDbRepository()
+    const sut = makeSut()
     const account = await sut.add({
       id: 'any_id',
       name: 'any_name',
