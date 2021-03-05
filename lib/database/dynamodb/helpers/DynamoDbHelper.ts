@@ -4,7 +4,7 @@ type ConnectParams = DocumentClient.DocumentClientOptions & DynamoDB.Types.Clien
 
 export const DynamoDbHelper = {
   connect (params?: ConnectParams): void {
-    const config = params ?? {}
+    const config = Object.assign({}, params)
     this.client = new DocumentClient(config)
   },
 
