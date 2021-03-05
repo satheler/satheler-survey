@@ -9,6 +9,5 @@ module.exports = {
         WriteCapacityUnits: 5
       }
     }
-  ],
-  basePort: 8001
+  ]
 }
