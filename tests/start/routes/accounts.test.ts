@@ -11,7 +11,7 @@ describe('Account Routes', () => {
     })
   })
 
-  describe('SignUp', () => {
+  describe('Create Account', () => {
     test('Should return an account on success', async () => {
       await request(app)
         .post('/accounts')

@@ -1,4 +1,4 @@
-import { SignUpController } from '../../../app/controllers/Account/SignUpController'
+import { CreateAccountController } from '../../../app/controllers/account/CreateAccountController'
 import { AddAccount, AddAccountParams } from '../../../app/domain/usecases/Account/AddAccount'
 import { MissingParamError, InvalidParamError, InternalServerError } from '../../../app/errors'
 import { httpResponseHelper } from '../../../app/helpers/HttpHelper'
@@ -6,7 +6,7 @@ import { Account } from '../../../app/models/Account'
 import { EmailValidator } from '../../../contracts'
 
 type SutTypes = {
-  sut: SignUpController
+  sut: CreateAccountController
   emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
 }
@@ -43,12 +43,12 @@ const makeAddAccountStub = (): AddAccount => {
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
   const addAccountStub = makeAddAccountStub()
-  const sut = new SignUpController(emailValidatorStub, addAccountStub)
+  const sut = new CreateAccountController(emailValidatorStub, addAccountStub)
 
   return { sut, emailValidatorStub, addAccountStub }
 }
 
-describe('SignUp Controller', () => {
+describe('CreateAccount Controller', () => {
   test('Should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
     const request = {

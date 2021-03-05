@@ -3,7 +3,7 @@ import { EmailValidator } from '../../../contracts/validator'
 import { AddAccount } from '../../domain/usecases/Account/AddAccount'
 import { InvalidParamError, MissingParamError } from '../../errors'
 
-export class SignUpController implements Controller {
+export class CreateAccountController implements Controller {
   constructor (
     private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount
