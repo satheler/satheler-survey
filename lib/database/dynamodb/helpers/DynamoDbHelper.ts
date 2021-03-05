@@ -1,10 +1,12 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb'
+import DynamoDB, { DocumentClient } from 'aws-sdk/clients/dynamodb'
+
+type ConnectParams = DocumentClient.DocumentClientOptions & DynamoDB.Types.ClientConfiguration
 
 export const DynamoDbHelper = {
-  connect (params?: any): void {
+  connect (params?: ConnectParams): void {
     const config = params ?? {}
-    this.client = new DynamoDB(config)
+    this.client = new DocumentClient(config)
   },
 
-  client: null as DynamoDB
+  client: null as DocumentClient
 }
