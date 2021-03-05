@@ -1,8 +1,7 @@
-import { Controller, HttpRequest, HttpResponse } from '../../../contracts'
+import { Controller, ControllerContext, HttpResponse } from '../../../contracts'
 import { EmailValidator } from '../../../contracts/validator'
 import { AddAccount } from '../../domain/usecases/Account/AddAccount'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, internalServerError, ok } from '../../helpers/HttpHelper'
 
 export class SignUpController implements Controller {
   constructor (
@@ -10,32 +9,32 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount
   ) { }
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
     try {
       const requiredFields = ['name', 'email', 'password', 'password_confirmation']
 
       for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field))
+        if (!request.body[field]) {
+          return response.badRequest(new MissingParamError(field))
         }
       }
 
-      const { name, email, password, password_confirmation: passwordConfirmation } = httpRequest.body
+      const { name, email, password, password_confirmation: passwordConfirmation } = request.body
 
       if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('password_confirmation'))
+        return response.badRequest(new InvalidParamError('password_confirmation'))
       }
 
       const isValid = this.emailValidator.isValid(email)
       if (!isValid) {
-        return badRequest(new InvalidParamError('email'))
+        return response.badRequest(new InvalidParamError('email'))
       }
 
       const account = await this.addAccount.add({ name, email, password })
 
-      return ok(account)
+      return response.ok(account)
     } catch (error) {
-      return internalServerError()
+      return response.internalServerError()
     }
   }
 }

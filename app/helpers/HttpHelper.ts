@@ -1,17 +1,19 @@
-import { HttpResponse } from '../../contracts'
+import { HttpResponse, HttpResponseHelper } from '../../contracts'
 import { InternalServerError } from '../errors'
 
-export const ok = (body: any): HttpResponse => ({
-  statusCode: 200,
-  body
-})
+export const httpResponseHelper: HttpResponseHelper = {
+  ok: (body?: any): HttpResponse => ({
+    statusCode: 200,
+    body
+  }),
 
-export const badRequest = (error: Error | Error[]): HttpResponse => ({
-  statusCode: 400,
-  body: error
-})
+  badRequest: (error: Error | Error[]): HttpResponse => ({
+    statusCode: 400,
+    body: error
+  }),
 
-export const internalServerError = (): HttpResponse => ({
-  statusCode: 500,
-  body: new InternalServerError()
-})
+  internalServerError: (): HttpResponse => ({
+    statusCode: 500,
+    body: new InternalServerError()
+  })
+}
