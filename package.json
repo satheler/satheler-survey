@@ -9,7 +9,13 @@
     "type": "git"
   },
   "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.production.json",
     "dev": "nodemon start/server.ts",
+    "start": "node dist/start/server.js",
+    "docker:up": "yarn build && docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "yarn build && docker build -t satheler/satheler-survey .",
+    "docker:run": "docker run -p 8000:8000 satheler/satheler-survey",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest.unit.config.js",
@@ -37,6 +43,7 @@
     "jest-dynalite": "^3.3.1",
     "lint-staged": "^10.5.4",
     "nodemon": "^2.0.7",
+    "rimraf": "^3.0.2",
     "supertest": "^6.1.3",
     "ts-jest": "^26.5.2",
     "ts-node": "^9.1.1",
@@ -45,6 +52,7 @@
   "dependencies": {
     "aws-sdk": "^2.857.0",
     "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "validator": "^13.5.2"
   }

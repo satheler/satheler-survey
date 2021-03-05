@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  satheler-survey:
+    container_name: satheler-survey
+    restart: always
+    build: .
+    image: satheler/satheler-survey
+    ports: 
+      - "8000:8000"
+    volumes: 
+      - ./dist:/usr/app/satheler-survey/dist
+      - ./package.json:/usr/app/satheler-survey/package.json
+    links: 
+      - localstack
+    depends_on:
+      - localstack
+    environment:
+      - AWS_ACCESS_KEY_ID=any_aws_access_key_id
+      - AWS_SECRET_ACCESS_KEY=secret
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+
+  localstack:
+    container_name: localstack
+    restart: always
+    image: localstack/localstack
+    ports: 
+      - "4566:4566"
+    volumes: 
+      - ./tmp:/tmp/localstack
+    environment: 
+      - DATA_DIR=/tmp/localstack
+

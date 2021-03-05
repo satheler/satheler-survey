@@ -15,6 +15,10 @@ dist
 # Test & Coverage directories
 coverage
 temp
+tmp
 
 # Editors config directories
 .vscode
+
+# Enviroment files
+.env
