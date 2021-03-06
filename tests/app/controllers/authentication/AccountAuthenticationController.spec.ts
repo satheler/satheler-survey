@@ -1,4 +1,5 @@
 import { AccountAuthenticationController } from '../../../../app/controllers/authentication/AccountAuthenticationController'
+import { MissingParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { ControllerContext, HttpRequest } from '../../../../contracts'
 
@@ -18,6 +19,26 @@ describe('Authentication Controller', () => {
     }
 
     const httpResponse = await sut.handle(controllerContext)
-    expect(httpResponse.statusCode).toEqual(400)
+    const expectedHttpResponse = httpResponseHelper.badRequest(new MissingParamError('email'))
+    expect(httpResponse).toEqual(expectedHttpResponse)
+  })
+
+  test('Should return 400 if no password is provided', async () => {
+    const sut = new AccountAuthenticationController()
+
+    const request: HttpRequest = {
+      body: {
+        email: 'any@email.com'
+      }
+    }
+
+    const controllerContext: ControllerContext = {
+      request,
+      response: httpResponseHelper
+    }
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedHttpResponse = httpResponseHelper.badRequest(new MissingParamError('password'))
+    expect(httpResponse).toEqual(expectedHttpResponse)
   })
 })
