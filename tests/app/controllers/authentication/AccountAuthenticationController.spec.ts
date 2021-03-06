@@ -160,4 +160,14 @@ describe('Authentication Controller', () => {
     const expectedHttpResponse = httpResponseHelper.internalServerError()
     expect(httpResponse).toEqual(expectedHttpResponse)
   })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+
+    const controllerContext = makeControllerContext()
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedHttpResponse = httpResponseHelper.ok({ access_token: 'any_token' })
+    expect(httpResponse).toEqual(expectedHttpResponse)
+  })
 })
