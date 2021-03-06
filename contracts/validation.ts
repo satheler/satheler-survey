@@ -1,3 +1,3 @@
 export interface Validation {
-  validate: (data: any) => Error
+  validate: (data: any) => Error | Promise<Error>
 }
