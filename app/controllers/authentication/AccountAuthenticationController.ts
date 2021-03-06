@@ -1,6 +1,6 @@
 import { Controller, ControllerContext, EmailValidator, HttpResponse } from '../../../contracts'
-import { Authentication } from '../../data/usecases/Account/Authentication'
 import { InvalidParamError, MissingParamError } from '../../errors'
+import { Authentication } from '../../data/usecases/Account/Authentication'
 
 export class AccountAuthenticationController implements Controller {
   constructor (

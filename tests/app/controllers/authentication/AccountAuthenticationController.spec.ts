@@ -149,4 +149,15 @@ describe('Authentication Controller', () => {
     const expectedHttpResponse = httpResponseHelper.unauthorized()
     expect(httpResponse).toEqual(expectedHttpResponse)
   })
+
+  test('Should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(new Error())
+
+    const controllerContext = makeControllerContext()
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedHttpResponse = httpResponseHelper.internalServerError()
+    expect(httpResponse).toEqual(expectedHttpResponse)
+  })
 })
