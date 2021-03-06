@@ -1,4 +1,5 @@
 import { AccountAuthenticationController } from '../../../../app/controllers/authentication/AccountAuthenticationController'
+import { Authentication, AuthenticationParams } from '../../../../app/data/usecases/Account/Authentication'
 import { InvalidParamError, MissingParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { ControllerContext, EmailValidator, HttpRequest } from '../../../../contracts'
@@ -14,18 +15,32 @@ const makeEmailValidatorStub = (): EmailValidator => {
   return emailValidatorStub
 }
 
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub {
+    async auth ({ email, password }: AuthenticationParams): Promise<string> {
+      return 'any_token'
+    }
+  }
+
+  const authenticationStub = new AuthenticationStub()
+  return authenticationStub
+}
+
 type SutTypes = {
   sut: AccountAuthenticationController
   emailValidatorStub: EmailValidator
+  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
-  const sut = new AccountAuthenticationController(emailValidatorStub)
+  const authenticationStub = makeAuthenticationStub()
+  const sut = new AccountAuthenticationController(emailValidatorStub, authenticationStub)
 
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    authenticationStub
   }
 }
 
@@ -112,5 +127,15 @@ describe('Authentication Controller', () => {
     const httpResponse = await sut.handle(controllerContext)
     const expectedHttpResponse = httpResponseHelper.internalServerError()
     expect(httpResponse).toEqual(expectedHttpResponse)
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+
+    const controllerContext = makeControllerContext()
+
+    await sut.handle(controllerContext)
+    expect(authSpy).toHaveBeenCalledWith(controllerContext.request.body)
   })
 })
