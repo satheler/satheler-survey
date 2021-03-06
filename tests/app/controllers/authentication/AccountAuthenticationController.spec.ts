@@ -1,5 +1,5 @@
 import { AccountAuthenticationController } from '../../../../app/controllers/authentication/AccountAuthenticationController'
-import { MissingParamError } from '../../../../app/errors'
+import { InvalidParamError, MissingParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { ControllerContext, EmailValidator, HttpRequest } from '../../../../contracts'
 
@@ -86,5 +86,26 @@ describe('Authentication Controller', () => {
 
     await sut.handle(controllerContext)
     expect(isValidSpy).toHaveBeenCalledWith(request.body.email)
+  })
+
+  test('Should return 400 if an invalid email is provided', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const request: HttpRequest = {
+      body: {
+        email: 'invalid@email.com',
+        password: 'any_password'
+      }
+    }
+
+    const controllerContext: ControllerContext = {
+      request,
+      response: httpResponseHelper
+    }
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedHttpResponse = httpResponseHelper.badRequest(new InvalidParamError('email'))
+    expect(httpResponse).toEqual(expectedHttpResponse)
   })
 })
