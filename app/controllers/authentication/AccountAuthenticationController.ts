@@ -23,7 +23,10 @@ export class AccountAuthenticationController implements Controller {
         return response.badRequest(new InvalidParamError('email'))
       }
 
-      await this.authentication.auth(request.body)
+      const accessToken = await this.authentication.auth(request.body)
+      if (!accessToken) {
+        return response.unauthorized()
+      }
     } catch (error) {
       return response.internalServerError()
     }

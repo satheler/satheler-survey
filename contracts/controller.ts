@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse } from './http'
 
-export type AvailableHttpResponseTypes = 'ok' | 'badRequest' | 'internalServerError'
+export type AvailableHttpResponseTypes = 'ok' | 'badRequest' | 'unauthorized' | 'internalServerError'
 export type HttpResponseHelperResponse = (...params: any) => HttpResponse
 export type HttpResponseHelper = Record<AvailableHttpResponseTypes, HttpResponseHelperResponse>
 
