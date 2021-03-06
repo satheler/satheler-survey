@@ -232,4 +232,14 @@ describe('CreateAccount Controller', () => {
     await sut.handle(controllerContext)
     expect(validateSpy).toHaveBeenCalledWith(controllerContext.request)
   })
+
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const controllerContext = makeControllerContext()
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedResponse = httpResponseHelper.badRequest(new Error())
+    expect(httpResponse).toEqual(expectedResponse)
+  })
 })
