@@ -1,6 +1,6 @@
 import { CreateAccountController } from '../../../../app/controllers/account/CreateAccountController'
 import { AddAccount, AddAccountParams } from '../../../../app/domain/usecases/Account/AddAccount'
-import { MissingParamError, InvalidParamError } from '../../../../app/errors'
+import { InvalidParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { Account } from '../../../../app/models/Account'
 import { ControllerContext, EmailValidator, HttpRequest, Validation } from '../../../../contracts'
@@ -75,66 +75,6 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CreateAccount Controller', () => {
-  test('Should return 400 if no name is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('name'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if no email is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        password: 'any_password',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('email'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if no password is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('password'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if no password confirmation is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('password_confirmation'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
   test('Should return 400 if password confirmation fails', async () => {
     const { sut } = makeSut()
     const request = {
