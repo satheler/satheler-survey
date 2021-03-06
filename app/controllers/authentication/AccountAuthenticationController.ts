@@ -1,5 +1,5 @@
 import { Controller, ControllerContext, EmailValidator, HttpResponse } from '../../../contracts'
-import { MissingParamError } from '../../errors'
+import { InvalidParamError, MissingParamError } from '../../errors'
 
 export class AccountAuthenticationController implements Controller {
   constructor (
@@ -15,6 +15,9 @@ export class AccountAuthenticationController implements Controller {
       return response.badRequest(new MissingParamError('password'))
     }
 
-    this.emailValidator.isValid(request.body.email)
+    const isEmailValid = this.emailValidator.isValid(request.body.email)
+    if (!isEmailValid) {
+      return response.badRequest(new InvalidParamError('email'))
+    }
   }
 }
