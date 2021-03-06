@@ -29,6 +29,18 @@ const makeSut = (): SutTypes => {
   }
 }
 
+const makeRequest = (): HttpRequest => ({
+  body: {
+    email: 'any@email.com',
+    password: 'any_password'
+  }
+})
+
+const makeControllerContext = (): ControllerContext => ({
+  request: makeRequest(),
+  response: httpResponseHelper
+})
+
 describe('Authentication Controller', () => {
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
@@ -72,37 +84,17 @@ describe('Authentication Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-    const request: HttpRequest = {
-      body: {
-        email: 'any@email.com',
-        password: 'any_password'
-      }
-    }
-
-    const controllerContext: ControllerContext = {
-      request,
-      response: httpResponseHelper
-    }
+    const controllerContext = makeControllerContext()
 
     await sut.handle(controllerContext)
-    expect(isValidSpy).toHaveBeenCalledWith(request.body.email)
+    expect(isValidSpy).toHaveBeenCalledWith(controllerContext.request.body.email)
   })
 
   test('Should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
 
-    const request: HttpRequest = {
-      body: {
-        email: 'invalid@email.com',
-        password: 'any_password'
-      }
-    }
-
-    const controllerContext: ControllerContext = {
-      request,
-      response: httpResponseHelper
-    }
+    const controllerContext = makeControllerContext()
 
     const httpResponse = await sut.handle(controllerContext)
     const expectedHttpResponse = httpResponseHelper.badRequest(new InvalidParamError('email'))
