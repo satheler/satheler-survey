@@ -1,15 +1,17 @@
-import { Controller, ControllerContext, HttpResponse } from '../../../contracts'
+import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
 import { EmailValidator } from '../../../contracts/validator'
 import { AddAccount } from '../../domain/usecases/Account/AddAccount'
 import { InvalidParamError, MissingParamError } from '../../errors'
 
 export class CreateAccountController implements Controller {
   constructor (
+    private readonly validation: Validation,
     private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount
   ) { }
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
+    this.validation.validate(request)
     try {
       const requiredFields = ['name', 'email', 'password', 'password_confirmation']
 
