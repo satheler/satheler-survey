@@ -27,6 +27,8 @@ export class AccountAuthenticationController implements Controller {
       if (!accessToken) {
         return response.unauthorized()
       }
+
+      return response.ok({ access_token: accessToken })
     } catch (error) {
       return response.internalServerError()
     }
