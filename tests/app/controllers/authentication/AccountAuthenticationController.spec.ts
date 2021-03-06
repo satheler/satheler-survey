@@ -80,6 +80,17 @@ describe('Authentication Controller', () => {
     expect(httpResponse).toEqual(expectedHttpResponse)
   })
 
+  test('Should return 400 if an invalid email is provided', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const controllerContext = makeControllerContext()
+
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedHttpResponse = httpResponseHelper.badRequest(new InvalidParamError('email'))
+    expect(httpResponse).toEqual(expectedHttpResponse)
+  })
+
   test('Should call EmailValidator with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
@@ -90,14 +101,16 @@ describe('Authentication Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith(controllerContext.request.body.email)
   })
 
-  test('Should return 400 if an invalid email is provided', async () => {
+  test('Should return 500 if EmailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
 
     const controllerContext = makeControllerContext()
 
     const httpResponse = await sut.handle(controllerContext)
-    const expectedHttpResponse = httpResponseHelper.badRequest(new InvalidParamError('email'))
+    const expectedHttpResponse = httpResponseHelper.internalServerError()
     expect(httpResponse).toEqual(expectedHttpResponse)
   })
 })
