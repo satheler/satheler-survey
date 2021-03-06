@@ -3,16 +3,20 @@ import { AddAccount, AddAccountParams } from '../../../../app/domain/usecases/Ac
 import { MissingParamError, InvalidParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { Account } from '../../../../app/models/Account'
-import { ControllerContext, EmailValidator, HttpRequest } from '../../../../contracts'
+import { ControllerContext, EmailValidator, HttpRequest, Validation } from '../../../../contracts'
 
-type SutTypes = {
-  sut: CreateAccountController
-  emailValidatorStub: EmailValidator
-  addAccountStub: AddAccount
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (data: any): Error {
+      return null
+    }
+  }
+
+  return new ValidationStub()
 }
 
 const makeEmailValidatorStub = (): EmailValidator => {
-  class EmailValidatorStub {
+  class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
       return true
     }
@@ -20,13 +24,6 @@ const makeEmailValidatorStub = (): EmailValidator => {
 
   return new EmailValidatorStub()
 }
-
-const makeFakeAccount = (): Account => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid@mail.com',
-  password: 'valid_password'
-})
 
 const makeAddAccountStub = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -37,9 +34,15 @@ const makeAddAccountStub = (): AddAccount => {
     }
   }
 
-  const addAccountStub = new AddAccountStub()
-  return addAccountStub
+  return new AddAccountStub()
 }
+
+const makeFakeAccount = (): Account => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid@mail.com',
+  password: 'valid_password'
+})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -55,12 +58,20 @@ const makeControllerContext = (): ControllerContext => ({
   response: httpResponseHelper
 })
 
+type SutTypes = {
+  sut: CreateAccountController
+  validationStub: Validation
+  emailValidatorStub: EmailValidator
+  addAccountStub: AddAccount
+}
+
 const makeSut = (): SutTypes => {
+  const validationStub = makeValidationStub()
   const emailValidatorStub = makeEmailValidatorStub()
   const addAccountStub = makeAddAccountStub()
-  const sut = new CreateAccountController(emailValidatorStub, addAccountStub)
+  const sut = new CreateAccountController(validationStub, emailValidatorStub, addAccountStub)
 
-  return { sut, emailValidatorStub, addAccountStub }
+  return { sut, validationStub, emailValidatorStub, addAccountStub }
 }
 
 describe('CreateAccount Controller', () => {
@@ -210,5 +221,15 @@ describe('CreateAccount Controller', () => {
     const fakeAccount = makeFakeAccount()
     const expectedResponse = httpResponseHelper.ok(fakeAccount)
     expect(httpResponse).toEqual(expectedResponse)
+  })
+
+  test('Should call Validator with correct value', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+
+    const controllerContext = makeControllerContext()
+
+    await sut.handle(controllerContext)
+    expect(validateSpy).toHaveBeenCalledWith(controllerContext.request)
   })
 })
