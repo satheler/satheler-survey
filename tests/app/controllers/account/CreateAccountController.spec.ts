@@ -18,8 +18,7 @@ const makeEmailValidatorStub = (): EmailValidator => {
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub()
-  return emailValidatorStub
+  return new EmailValidatorStub()
 }
 
 const makeFakeAccount = (): Account => ({

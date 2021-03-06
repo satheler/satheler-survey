@@ -1,17 +1,31 @@
 import { AccountAuthenticationController } from '../../../../app/controllers/authentication/AccountAuthenticationController'
 import { MissingParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
-import { ControllerContext, HttpRequest } from '../../../../contracts'
+import { ControllerContext, EmailValidator, HttpRequest } from '../../../../contracts'
+
+const makeEmailValidatorStub = (): EmailValidator => {
+  class EmailValidatorStub {
+    isValid (email: string): boolean {
+      return true
+    }
+  }
+
+  const emailValidatorStub = new EmailValidatorStub()
+  return emailValidatorStub
+}
 
 type SutTypes = {
   sut: AccountAuthenticationController
+  emailValidatorStub: EmailValidator
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AccountAuthenticationController()
+  const emailValidatorStub = makeEmailValidatorStub()
+  const sut = new AccountAuthenticationController(emailValidatorStub)
 
   return {
-    sut
+    sut,
+    emailValidatorStub
   }
 }
 
@@ -52,5 +66,25 @@ describe('Authentication Controller', () => {
     const httpResponse = await sut.handle(controllerContext)
     const expectedHttpResponse = httpResponseHelper.badRequest(new MissingParamError('password'))
     expect(httpResponse).toEqual(expectedHttpResponse)
+  })
+
+  test('Should call EmailValidator with correct email', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+
+    const request: HttpRequest = {
+      body: {
+        email: 'any@email.com',
+        password: 'any_password'
+      }
+    }
+
+    const controllerContext: ControllerContext = {
+      request,
+      response: httpResponseHelper
+    }
+
+    await sut.handle(controllerContext)
+    expect(isValidSpy).toHaveBeenCalledWith(request.body.email)
   })
 })
