@@ -10,17 +10,15 @@ export class AccountAuthenticationController implements Controller {
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
     try {
-      const { email, password } = request.body
+      const requiredFields = ['email', 'password']
 
-      if (!email) {
-        return response.badRequest(new MissingParamError('email'))
+      for (const field of requiredFields) {
+        if (!request.body[field]) {
+          return response.badRequest(new MissingParamError(field))
+        }
       }
 
-      if (!password) {
-        return response.badRequest(new MissingParamError('password'))
-      }
-
-      const isEmailValid = this.emailValidator.isValid(email)
+      const isEmailValid = this.emailValidator.isValid(request.body.email)
       if (!isEmailValid) {
         return response.badRequest(new InvalidParamError('email'))
       }
