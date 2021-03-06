@@ -3,9 +3,21 @@ import { MissingParamError } from '../../../../app/errors'
 import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
 import { ControllerContext, HttpRequest } from '../../../../contracts'
 
+type SutTypes = {
+  sut: AccountAuthenticationController
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new AccountAuthenticationController()
+
+  return {
+    sut
+  }
+}
+
 describe('Authentication Controller', () => {
   test('Should return 400 if no email is provided', async () => {
-    const sut = new AccountAuthenticationController()
+    const { sut } = makeSut()
 
     const request: HttpRequest = {
       body: {
@@ -24,7 +36,7 @@ describe('Authentication Controller', () => {
   })
 
   test('Should return 400 if no password is provided', async () => {
-    const sut = new AccountAuthenticationController()
+    const { sut } = makeSut()
 
     const request: HttpRequest = {
       body: {
