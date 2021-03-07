@@ -1,6 +1,6 @@
 import { Controller } from '../../../../contracts'
 import { CreateAccountController } from '../../../../app/controllers/account/CreateAccountController'
-import { DatabaseAddAccount } from '../../../../app/usecases/DatabaseAddAccount'
+import { DatabaseAddAccount } from '../../../../app/usecases/account/DatabaseAddAccount'
 import { BcryptAdapter } from '../../../../lib/criptography/BcryptAdapter'
 import { AccountDynamoDbRepository } from '../../../../app/repositories/dynamodb/AccountRepository'
 import { makeCreateAccountValidation } from './CreateAccountValidationFactory'

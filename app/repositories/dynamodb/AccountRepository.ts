@@ -1,6 +1,6 @@
 import { Account } from '../../domain/entities/Account'
 import { DynamoDbHelper } from '../../../lib/database/dynamodb/DynamoDbHelper'
-import { AddAccountRepository } from '../contracts/accounts/AddAccountRepository'
+import { AddAccountRepository } from '../contracts/account/AddAccountRepository'
 
 export class AccountDynamoDbRepository implements AddAccountRepository {
   constructor (private readonly tableName: string = 'accounts') {}

@@ -1,7 +1,7 @@
-import { Account, AddAccountParams } from '../../../app/domain/entities/Account'
-import { DatabaseAddAccount } from '../../../app/usecases/DatabaseAddAccount'
-import { AddAccountRepository } from '../../../app/repositories/contracts/accounts/AddAccountRepository'
-import { Encrypter } from '../../../contracts'
+import { Account, AddAccountParams } from '../../../../app/domain/entities/Account'
+import { DatabaseAddAccount } from '../../../../app/usecases/account/DatabaseAddAccount'
+import { AddAccountRepository } from '../../../../app/repositories/contracts/account/AddAccountRepository'
+import { Encrypter } from '../../../../contracts'
 
 const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {
