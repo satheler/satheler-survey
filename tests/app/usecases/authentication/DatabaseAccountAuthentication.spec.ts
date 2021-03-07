@@ -132,4 +132,10 @@ describe('Database AccountAuthentication UseCase', () => {
     const accountPromise = sut.auth(makeAuthentication)
     await expect(accountPromise).rejects.toThrow()
   })
+
+  test('Should return a access token on succeeds', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth(makeAuthentication)
+    expect(accessToken).toBe('any_token')
+  })
 })
