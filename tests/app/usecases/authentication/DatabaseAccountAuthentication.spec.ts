@@ -47,4 +47,19 @@ describe('Database AccountAuthentication UseCase', () => {
 
     expect(findSpy).toHaveBeenCalledWith({ email: 'valid@mail.com' })
   })
+
+  test('Should throw if FindAccountByEmailRepository throws', async () => {
+    const { sut, findAccountByEmailRepositoryStub } = makeSut()
+
+    jest.spyOn(findAccountByEmailRepositoryStub, 'find').mockRejectedValueOnce(() => {
+      throw new Error()
+    })
+
+    const account = sut.auth({
+      email: 'valid@mail.com',
+      password: 'any_password'
+    })
+
+    await expect(account).rejects.toThrow()
+  })
 })
