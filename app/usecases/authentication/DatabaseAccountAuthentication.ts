@@ -15,6 +15,9 @@ export class DatabaseAccountAuthentication implements AccountAuthentication {
       return null
     }
 
-    await this.hashComparer.compare(password, account.password)
+    const isValidPassword = await this.hashComparer.compare(password, account.password)
+    if (!isValidPassword) {
+      return null
+    }
   }
 }
