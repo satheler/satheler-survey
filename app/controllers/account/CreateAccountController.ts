@@ -1,5 +1,5 @@
 import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
-import { AddAccount } from '../../domain/usecases/Account/AddAccount'
+import { AddAccount } from '../../domain/entities/Account'
 
 export class CreateAccountController implements Controller {
   constructor (

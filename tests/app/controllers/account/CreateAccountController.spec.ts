@@ -1,7 +1,7 @@
 import { CreateAccountController } from '../../../../app/controllers/account/CreateAccountController'
-import { AddAccount, AddAccountParams } from '../../../../app/domain/usecases/Account/AddAccount'
-import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
-import { Account } from '../../../../app/models/Account'
+import { AddAccount, AddAccountParams } from '../../../../app/domain/entities/AddAccount'
+import { httpResponseHelper } from '../../../../lib/helpers/HttpResponseHelper'
+import { Account } from '../../../../app/domain/entities/Account'
 import { ControllerContext, HttpRequest, Validation } from '../../../../contracts'
 
 const makeValidationStub = (): Validation => {

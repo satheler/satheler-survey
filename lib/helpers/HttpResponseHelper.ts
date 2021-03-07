@@ -1,5 +1,5 @@
 import { HttpResponse, HttpResponseHelper } from '../../contracts'
-import { InternalServerError, UnauthorizedError } from '../errors'
+import { InternalServerError, UnauthorizedError } from '../../app/errors'
 
 export const httpResponseHelper: HttpResponseHelper = {
   ok: (body?: any): HttpResponse => ({

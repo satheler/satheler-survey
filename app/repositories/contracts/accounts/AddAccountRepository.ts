@@ -1,4 +1,4 @@
-import { Account } from '../../models/Account'
+import { Account } from '../../../domain/entities/Account'
 
 export interface AddAccountRepository {
   add: (account: Account) => Promise<Account>

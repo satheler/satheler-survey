@@ -1,10 +1,10 @@
 import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
-import { Authentication } from '../../data/usecases/Account/Authentication'
+import { AccountAuthentication } from '../../domain/entities/Account'
 
 export class AccountAuthenticationController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly authentication: Authentication
+    private readonly authentication: AccountAuthentication
   ) { }
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {

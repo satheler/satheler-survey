@@ -1,6 +1,6 @@
 import { AccountAuthenticationController } from '../../../../app/controllers/authentication/AccountAuthenticationController'
-import { Authentication, AuthenticationParams } from '../../../../app/data/usecases/Account/Authentication'
-import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
+import { AccountAuthentication, AccountAuthenticationParams } from '../../../../app/domain/entities/Account'
+import { httpResponseHelper } from '../../../../lib/helpers/HttpResponseHelper'
 import { ControllerContext, HttpRequest, Validation } from '../../../../contracts'
 
 const makeValidationStub = (): Validation => {
@@ -13,9 +13,9 @@ const makeValidationStub = (): Validation => {
   return new ValidationStub()
 }
 
-const makeAuthenticationStub = (): Authentication => {
+const makeAuthenticationStub = (): AccountAuthentication => {
   class AuthenticationStub {
-    async auth ({ email, password }: AuthenticationParams): Promise<string> {
+    async auth ({ email, password }: AccountAuthenticationParams): Promise<string> {
       return 'any_token'
     }
   }
@@ -26,7 +26,7 @@ const makeAuthenticationStub = (): Authentication => {
 type SutTypes = {
   sut: AccountAuthenticationController
   validationStub: Validation
-  authenticationStub: Authentication
+  authenticationStub: AccountAuthentication
 }
 
 const makeSut = (): SutTypes => {

@@ -1,7 +1,6 @@
-import { Encrypter } from '../../../../contracts'
-import { AddAccount, AddAccountParams } from '../../../domain/usecases/Account/AddAccount'
-import { Account } from '../../../models/Account'
-import { AddAccountRepository } from '../../contracts/AddAccountRepository'
+import { Encrypter } from '../../contracts'
+import { Account, AddAccount, AddAccountParams } from '../domain/entities/Account'
+import { AddAccountRepository } from '../repositories/contracts/accounts/AddAccountRepository'
 
 export class DatabaseAddAccount implements AddAccount {
   constructor (

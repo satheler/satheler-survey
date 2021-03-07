@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import { Controller, HttpRequest } from '../../contracts'
-import { httpResponseHelper } from '../../app/helpers/HttpHelper'
+import { httpResponseHelper } from '../../lib/helpers/HttpResponseHelper'
 
 export const adaptRoute = (controller: Controller): RequestHandler => {
   return async (request, response) => {
