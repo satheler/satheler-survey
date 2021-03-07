@@ -1,6 +1,8 @@
+import { EmailValidatorAdapter } from '../../app/validators/EmailValidatorAdapter'
 import { Validation } from '../../contracts'
-import { RequiredFieldValidation } from '../../lib/validation/RequiredFieldValidation'
 import { CompareFieldsValidation } from '../../lib/validation/CompareFieldsValidation'
+import { EmailValidation } from '../../lib/validation/EmailValidation'
+import { RequiredFieldValidation } from '../../lib/validation/RequiredFieldValidation'
 import { ValidationComposite } from '../../lib/validation/ValidationComposite'
 
 export const makeCreateAccountValidation = (): Validation => {
@@ -11,7 +13,10 @@ export const makeCreateAccountValidation = (): Validation => {
 
   const comparePassword = new CompareFieldsValidation('password', 'password_confirmation')
 
-  const validationComposite = validations.concat(requiredFieldsValidations, comparePassword)
+  const emailValidatorAdapter = new EmailValidatorAdapter()
+  const emailValidation = new EmailValidation('email', emailValidatorAdapter)
+
+  const validationComposite = validations.concat(requiredFieldsValidations, comparePassword, emailValidation)
 
   return new ValidationComposite(validationComposite)
 }

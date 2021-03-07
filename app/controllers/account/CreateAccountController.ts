@@ -1,12 +1,9 @@
 import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
-import { EmailValidator } from '../../../contracts/validator'
 import { AddAccount } from '../../domain/usecases/Account/AddAccount'
-import { InvalidParamError } from '../../errors'
 
 export class CreateAccountController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount
   ) { }
 
@@ -14,15 +11,11 @@ export class CreateAccountController implements Controller {
     try {
       const error = this.validation.validate(request.body)
       if (error) {
+        console.log(error)
         return response.badRequest(error)
       }
 
       const { name, email, password } = request.body
-
-      const isValid = this.emailValidator.isValid(email)
-      if (!isValid) {
-        return response.badRequest(new InvalidParamError('email'))
-      }
 
       const account = await this.addAccount.add({ name, email, password })
 
