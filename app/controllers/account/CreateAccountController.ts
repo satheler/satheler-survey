@@ -17,11 +17,7 @@ export class CreateAccountController implements Controller {
         return response.badRequest(error)
       }
 
-      const { name, email, password, password_confirmation: passwordConfirmation } = request.body
-
-      if (password !== passwordConfirmation) {
-        return response.badRequest(new InvalidParamError('password_confirmation'))
-      }
+      const { name, email, password } = request.body
 
       const isValid = this.emailValidator.isValid(email)
       if (!isValid) {
