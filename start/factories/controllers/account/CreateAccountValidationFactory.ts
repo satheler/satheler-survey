@@ -1,9 +1,9 @@
-import { EmailValidatorAdapter } from '../../app/validators/EmailValidatorAdapter'
-import { Validation } from '../../contracts'
-import { CompareFieldsValidation } from '../../lib/validation/CompareFieldsValidation'
-import { EmailValidation } from '../../lib/validation/EmailValidation'
-import { RequiredFieldValidation } from '../../lib/validation/RequiredFieldValidation'
-import { ValidationComposite } from '../../lib/validation/ValidationComposite'
+import { EmailValidatorAdapter } from '../../../../app/validators/EmailValidatorAdapter'
+import { Validation } from '../../../../contracts'
+import { CompareFieldsValidation } from '../../../../lib/validation/CompareFieldsValidation'
+import { EmailValidation } from '../../../../lib/validation/EmailValidation'
+import { RequiredFieldValidation } from '../../../../lib/validation/RequiredFieldValidation'
+import { ValidationComposite } from '../../../../lib/validation/ValidationComposite'
 
 export const makeCreateAccountValidation = (): Validation => {
   const validations: Validation[] = []

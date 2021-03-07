@@ -1,26 +1,17 @@
-import { Controller, ControllerContext, EmailValidator, HttpResponse } from '../../../contracts'
-import { InvalidParamError, MissingParamError } from '../../errors'
+import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
 import { Authentication } from '../../data/usecases/Account/Authentication'
 
 export class AccountAuthenticationController implements Controller {
   constructor (
-    private readonly emailValidator: EmailValidator,
+    private readonly validation: Validation,
     private readonly authentication: Authentication
   ) { }
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
     try {
-      const requiredFields = ['email', 'password']
-
-      for (const field of requiredFields) {
-        if (!request.body[field]) {
-          return response.badRequest(new MissingParamError(field))
-        }
-      }
-
-      const isEmailValid = this.emailValidator.isValid(request.body.email)
-      if (!isEmailValid) {
-        return response.badRequest(new InvalidParamError('email'))
+      const error = this.validation.validate(request.body)
+      if (error) {
+        return response.badRequest(error)
       }
 
       const accessToken = await this.authentication.auth(request.body)
