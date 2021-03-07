@@ -12,7 +12,7 @@ export class CreateAccountController implements Controller {
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(request)
+      const error = this.validation.validate(request.body)
       if (error) {
         return response.badRequest(error)
       }

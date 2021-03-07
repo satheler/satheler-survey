@@ -170,7 +170,7 @@ describe('CreateAccount Controller', () => {
     const controllerContext = makeControllerContext()
 
     await sut.handle(controllerContext)
-    expect(validateSpy).toHaveBeenCalledWith(controllerContext.request)
+    expect(validateSpy).toHaveBeenCalledWith(controllerContext.request.body)
   })
 
   test('Should return 400 if Validation returns an error', async () => {

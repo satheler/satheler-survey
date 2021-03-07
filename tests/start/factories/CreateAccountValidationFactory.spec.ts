@@ -8,7 +8,7 @@ describe('CreateAccountValidation Factory', () => {
   test('Should call ValidationComposite with all validations', () => {
     makeCreateAccountValidation()
 
-    const requiredFields = ['name', 'email']
+    const requiredFields = ['name', 'email', 'password', 'password_confirmation']
     const requiredFieldsValidations = requiredFields.map(field => new RequiredFieldValidation(field))
 
     expect(ValidationComposite).toHaveBeenCalledWith(requiredFieldsValidations)
