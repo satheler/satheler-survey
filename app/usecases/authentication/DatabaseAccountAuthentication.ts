@@ -2,12 +2,14 @@ import { HashComparer } from '../../../contracts'
 import { TokenGenerator } from '../../../contracts/token-generator'
 import { AccountAuthentication, AccountAuthenticationParams } from '../../domain/entities/Account'
 import { FindAccountByEmailRepository } from '../../repositories/contracts/account/FindAccountByEmailRepository'
+import { UpdateAccountAccessTokenRepository } from '../../repositories/contracts/account/UpdateAccountAccessTokenRepository'
 
 export class DatabaseAccountAuthentication implements AccountAuthentication {
   constructor (
     private readonly findAccountByEmailRepository: FindAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly tokenGenerator: TokenGenerator
+    private readonly tokenGenerator: TokenGenerator,
+    private readonly updateAccountAccessTokenRepository: UpdateAccountAccessTokenRepository
   ) { }
 
   async auth ({ email, password }: AccountAuthenticationParams): Promise<string> {
@@ -22,6 +24,7 @@ export class DatabaseAccountAuthentication implements AccountAuthentication {
     }
 
     const accessToken = await this.tokenGenerator.generate(account.id)
+    await this.updateAccountAccessTokenRepository.update(account.id, accessToken)
     return accessToken
   }
 }
