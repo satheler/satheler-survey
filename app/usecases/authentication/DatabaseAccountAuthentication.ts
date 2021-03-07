@@ -21,6 +21,7 @@ export class DatabaseAccountAuthentication implements AccountAuthentication {
       return null
     }
 
-    await this.tokenGenerator.generate(account.id)
+    const accessToken = await this.tokenGenerator.generate(account.id)
+    return accessToken
   }
 }
