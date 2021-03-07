@@ -11,7 +11,6 @@ export class CreateAccountController implements Controller {
     try {
       const error = this.validation.validate(request.body)
       if (error) {
-        console.log(error)
         return response.badRequest(error)
       }
 
