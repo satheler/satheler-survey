@@ -11,11 +11,12 @@ export class CreateAccountController implements Controller {
   ) { }
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
-    const error = this.validation.validate(request)
-    if (error) {
-      return response.badRequest(error)
-    }
     try {
+      const error = this.validation.validate(request)
+      if (error) {
+        return response.badRequest(error)
+      }
+
       const { name, email, password, password_confirmation: passwordConfirmation } = request.body
 
       if (password !== passwordConfirmation) {
