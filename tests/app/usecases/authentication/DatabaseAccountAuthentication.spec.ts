@@ -157,10 +157,20 @@ describe('Database AccountAuthentication UseCase', () => {
     expect(accessToken).toBe('any_token')
   })
 
-  test('Should call UpdateAccessTokenRepository with correct values', async () => {
+  test('Should call UpdateAccountAccessTokenRepository with correct values', async () => {
     const { sut, updateAccountAccessTokenRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateAccountAccessTokenRepositoryStub, 'update')
     await sut.auth(makeAuthentication)
     expect(updateSpy).toHaveBeenCalledWith('valid_id', 'any_token')
+  })
+
+  test('Should throw if UpdateAccountAccessTokenRepository throws', async () => {
+    const { sut, updateAccountAccessTokenRepositoryStub } = makeSut()
+
+    jest.spyOn(updateAccountAccessTokenRepositoryStub, 'update').mockRejectedValueOnce(() => {
+      throw new Error()
+    })
+    const accountPromise = sut.auth(makeAuthentication)
+    await expect(accountPromise).rejects.toThrow()
   })
 })
