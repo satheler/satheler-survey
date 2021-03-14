@@ -23,12 +23,18 @@
 |
 */
 
+import Route from '@ioc:Adonis/Core/Route'
 import { readdirSync } from 'fs'
 import path from 'path'
 
 readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== path.basename(__filename)) && (file.slice(-4) !== '.map'))
   .forEach((file) => {
+    const routePath = file.replace(/\.(ts|js)$/gi, '')
+    const routePrefix = routePath === 'home' ? '' : routePath
     const route = path.join(__dirname, file)
-    require(route)
+
+    Route.group(() => {
+      require(route)
+    }).prefix(routePrefix)
   })
