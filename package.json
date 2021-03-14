@@ -13,6 +13,7 @@
     "adonis-preset-ts": "^2.0.0",
     "eslint": "^7.22.0",
     "eslint-plugin-adonis": "^1.2.1",
+    "git-commit-msg-linter": "^3.0.3",
     "pino-pretty": "^4.7.1",
     "typescript": "~4.1",
     "youch": "^2.1.1",
