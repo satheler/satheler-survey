@@ -1,16 +1,33 @@
 {
+  "extends": "./node_modules/adonis-preset-ts/tsconfig",
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ],
   "compilerOptions": {
-    "outDir": "dist",
-    "module": "commonjs",
-    "target": "es2019",
-    "esModuleInterop": true,
+    "outDir": "build",
+    "rootDir": "./",
     "sourceMap": true,
-    "strict": true,
-    "allowJs": true,
-    "isolatedModules": false,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "strictNullChecks": false,
+    "paths": {
+      "App/*": [
+        "./app/*"
+      ],
+      "Config/*": [
+        "./config/*"
+      ],
+      "Contracts/*": [
+        "./contracts/*"
+      ],
+      "Database/*": [
+        "./database/*"
+      ]
+    },
+    "types": [
+      "@adonisjs/core",
+      "@adonisjs/repl"
+    ]
   }
 }
