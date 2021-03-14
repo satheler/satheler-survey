@@ -8,18 +8,27 @@
 | files and just make sure to import them inside this file. For example
 |
 | Define routes in following two files
-| ├── start/routes/cart.ts
-| ├── start/routes/customer.ts
+| ├── start/routes/resource.ts
+| ├── start/routes/another_resource.ts
 |
 | and then import them inside `start/routes/index.ts` as follows
 |
-| import './cart'
-| import './customer'
+| import './resource'
+| import './another-resource'
+|
+| OR inside a group
+|
+| require('resource')
+| require('another-resource')
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import { readdirSync } from 'fs'
+import path from 'path'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+readdirSync(__dirname)
+  .filter(file => (file.indexOf('.') !== 0) && (file !== path.basename(__filename)) && (file.slice(-4) !== '.map'))
+  .forEach((file) => {
+    const route = path.join(__dirname, file)
+    require(route)
+  })
