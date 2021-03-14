@@ -37,4 +37,10 @@ export default Env.rules({
   PG_USER: Env.schema.string(),
   PG_PASSWORD: Env.schema.string(),
   PG_DB_NAME: Env.schema.string(),
+
+  /**
+   * Security
+   */
+  HASH_DRIVER: Env.schema.enum(['bcrypt', 'argon'] as const),
+
 })

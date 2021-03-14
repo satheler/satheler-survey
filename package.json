@@ -16,17 +16,21 @@
     "lint": "eslint . --ext=.ts"
   },
   "dependencies": {
+    "@adonisjs/auth": "^5.1.1",
     "@adonisjs/core": "^5.0.4-preview-rc",
     "@adonisjs/lucid": "^10.0.0",
     "@adonisjs/repl": "^1.0.0",
     "luxon": "^1.26.0",
     "pg": "^8.5.1",
+    "phc-bcrypt": "^1.0.5",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.0",
+    "@types/uuid": "^8.3.0",
     "adonis-preset-ts": "^2.0.0",
     "eslint": "^7.22.0",
     "eslint-plugin-adonis": "^1.2.1",
