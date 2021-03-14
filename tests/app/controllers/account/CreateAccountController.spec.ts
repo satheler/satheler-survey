@@ -1,33 +1,17 @@
 import { CreateAccountController } from '../../../../app/controllers/account/CreateAccountController'
-import { AddAccount, AddAccountParams } from '../../../../app/domain/usecases/Account/AddAccount'
-import { MissingParamError, InvalidParamError } from '../../../../app/errors'
-import { httpResponseHelper } from '../../../../app/helpers/HttpHelper'
-import { Account } from '../../../../app/models/Account'
-import { EmailValidator, HttpRequest } from '../../../../contracts'
+import { httpResponseHelper } from '../../../../lib/helpers/HttpResponseHelper'
+import { Account, AddAccount, AddAccountParams } from '../../../../app/domain/entities/Account'
+import { ControllerContext, HttpRequest, Validation } from '../../../../contracts'
 
-type SutTypes = {
-  sut: CreateAccountController
-  emailValidatorStub: EmailValidator
-  addAccountStub: AddAccount
-}
-
-const makeEmailValidatorStub = (): EmailValidator => {
-  class EmailValidatorStub {
-    isValid (email: string): boolean {
-      return true
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (data: any): Error {
+      return null
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub()
-  return emailValidatorStub
+  return new ValidationStub()
 }
-
-const makeFakeAccount = (): Account => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid@mail.com',
-  password: 'valid_password'
-})
 
 const makeAddAccountStub = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -38,9 +22,15 @@ const makeAddAccountStub = (): AddAccount => {
     }
   }
 
-  const addAccountStub = new AddAccountStub()
-  return addAccountStub
+  return new AddAccountStub()
 }
+
+const makeFakeAccount = (): Account => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid@mail.com',
+  password: 'valid_password'
+})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -51,123 +41,43 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 })
 
-const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidatorStub()
-  const addAccountStub = makeAddAccountStub()
-  const sut = new CreateAccountController(emailValidatorStub, addAccountStub)
+const makeControllerContext = (): ControllerContext => ({
+  request: makeFakeRequest(),
+  response: httpResponseHelper
+})
 
-  return { sut, emailValidatorStub, addAccountStub }
+type SutTypes = {
+  sut: CreateAccountController
+  validationStub: Validation
+  addAccountStub: AddAccount
+}
+
+const makeSut = (): SutTypes => {
+  const validationStub = makeValidationStub()
+  const addAccountStub = makeAddAccountStub()
+  const sut = new CreateAccountController(validationStub, addAccountStub)
+
+  return { sut, validationStub, addAccountStub }
 }
 
 describe('CreateAccount Controller', () => {
-  test('Should return 400 if no name is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
+  test('Should call Validator with correct value', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
 
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('name'))
-    expect(httpResponse).toEqual(expectedResponse)
+    const controllerContext = makeControllerContext()
+
+    await sut.handle(controllerContext)
+    expect(validateSpy).toHaveBeenCalledWith(controllerContext.request.body)
   })
 
-  test('Should return 400 if no email is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        password: 'any_password',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const controllerContext = makeControllerContext()
 
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('email'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if no password is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password_confirmation: 'any_password_confirmation'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('password'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if no password confirmation is provided', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new MissingParamError('password_confirmation'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if password confirmation fails', async () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        password_confirmation: 'invalid_password'
-      }
-    }
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new InvalidParamError('password_confirmation'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should return 400 if an invalid email is provided', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-
-    const request = makeFakeRequest()
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-    const expectedResponse = httpResponseHelper.badRequest(new InvalidParamError('email'))
-    expect(httpResponse).toEqual(expectedResponse)
-  })
-
-  test('Should call EmailValidator with correct email', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-
-    const request = makeFakeRequest()
-
-    await sut.handle({ request, response: httpResponseHelper })
-    expect(isValidSpy).toHaveBeenCalledWith(request.body.email)
-  })
-
-  test('Should return 500 if EmailValidator throws', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error()
-    })
-
-    const request = makeFakeRequest()
-
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
-
-    const expectedResponse = httpResponseHelper.internalServerError()
+    const httpResponse = await sut.handle(controllerContext)
+    const expectedResponse = httpResponseHelper.badRequest(new Error())
     expect(httpResponse).toEqual(expectedResponse)
   })
 
@@ -175,9 +85,9 @@ describe('CreateAccount Controller', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
 
-    const request = makeFakeRequest()
+    const controllerContext = makeControllerContext()
 
-    await sut.handle({ request, response: httpResponseHelper })
+    await sut.handle(controllerContext)
     expect(addSpy).toHaveBeenCalledWith({
       name: 'valid_name',
       email: 'valid@mail.com',
@@ -189,9 +99,9 @@ describe('CreateAccount Controller', () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockRejectedValueOnce(new Error())
 
-    const request = makeFakeRequest()
+    const controllerContext = makeControllerContext()
 
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
+    const httpResponse = await sut.handle(controllerContext)
     const expectedResponse = httpResponseHelper.internalServerError()
     expect(httpResponse).toEqual(expectedResponse)
   })
@@ -199,9 +109,9 @@ describe('CreateAccount Controller', () => {
   test('Should return 200 if valid values is provided', async () => {
     const { sut } = makeSut()
 
-    const request = makeFakeRequest()
+    const controllerContext = makeControllerContext()
 
-    const httpResponse = await sut.handle({ request, response: httpResponseHelper })
+    const httpResponse = await sut.handle(controllerContext)
 
     const fakeAccount = makeFakeAccount()
     const expectedResponse = httpResponseHelper.ok(fakeAccount)

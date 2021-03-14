@@ -1,10 +1,10 @@
 import { Controller, ControllerContext, HttpResponse, Validation } from '../../../contracts'
-import { AddAccount } from '../../domain/entities/Account'
+import { AccountAuthentication } from '../../domain/entities/Account'
 
-export class CreateAccountController implements Controller {
+export class AccountAuthenticationController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly addAccount: AddAccount
+    private readonly authentication: AccountAuthentication
   ) { }
 
   async handle ({ request, response }: ControllerContext): Promise<HttpResponse> {
@@ -14,13 +14,13 @@ export class CreateAccountController implements Controller {
         return response.badRequest(error)
       }
 
-      const { name, email, password } = request.body
+      const accessToken = await this.authentication.auth(request.body)
+      if (!accessToken) {
+        return response.unauthorized()
+      }
 
-      const account = await this.addAccount.add({ name, email, password })
-
-      return response.ok(account)
+      return response.ok({ access_token: accessToken })
     } catch (error) {
-      console.error(error)
       return response.internalServerError()
     }
   }
