@@ -32,7 +32,9 @@ export default class Survey extends BaseModel {
   @column.dateTime()
   public closingTime?: DateTime
 
-  @column()
+  @column({
+    serialize: (value) => value ? Boolean(value) : false,
+  })
   public authenticatedAccountOnly: boolean
 
   @column.dateTime({ autoCreate: true })

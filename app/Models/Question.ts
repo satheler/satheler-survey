@@ -12,8 +12,10 @@ export default class Question extends BaseModel {
   @column()
   public question: string
 
-  @column()
-  public is_required: boolean
+  @column({
+    serialize: (value) => value ? Boolean(value) : false,
+  })
+  public isRequired: boolean
 
   @column()
   public surveyId: string
