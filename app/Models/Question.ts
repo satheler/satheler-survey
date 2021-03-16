@@ -1,5 +1,4 @@
-import { BaseModel, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import { BelongsTo } from '@ioc:Adonis/Lucid/Relations'
+import { BaseModel, beforeCreate, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import Survey from './Survey'

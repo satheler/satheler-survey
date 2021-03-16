@@ -1,5 +1,4 @@
-import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { BelongsTo, HasMany } from '@ioc:Adonis/Lucid/Relations'
+import { BaseModel, beforeCreate, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import { Account, Question } from 'App/Models'
@@ -33,6 +32,9 @@ export default class Survey extends BaseModel {
   @column.dateTime()
   public closingTime?: DateTime
 
+  @column()
+  public authenticatedAccountOnly: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -42,5 +44,11 @@ export default class Survey extends BaseModel {
   @beforeCreate()
   public static async createUUID (model: Survey) {
     model.id = uuid()
+  }
+
+  @beforeCreate()
+  public static setDefaultValues (model: Survey) {
+    model.openingTime = model.openingTime ?? DateTime.now()
+    model.authenticatedAccountOnly = model.authenticatedAccountOnly ?? true
   }
 }
