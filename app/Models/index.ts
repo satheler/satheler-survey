@@ -1,4 +1,5 @@
 export { default as Account } from './Account'
+export { default as Answer } from './Answer'
 export { default as Question } from './Question'
+export { default as Respondent } from './Respondent'
 export { default as Survey } from './Survey'
-export { default as SurveyAnswer } from './SurveyAnswer'

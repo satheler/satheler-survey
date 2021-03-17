@@ -1,9 +1,9 @@
 import { BaseModel, beforeCreate, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { Question, Respondent } from 'App/Models'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
-import { Question } from '.'
 
-export default class SurveyAnswer extends BaseModel {
+export default class Answer extends BaseModel {
   public static selfAssignPrimaryKey = true
 
   @column({ isPrimary: true })
@@ -16,6 +16,12 @@ export default class SurveyAnswer extends BaseModel {
   public question: BelongsTo<typeof Question>
 
   @column()
+  public respondentId: string
+
+  @belongsTo(() => Respondent)
+  public respondents: BelongsTo<typeof Respondent>
+
+  @column()
   public answer: string
 
   @column.dateTime({ autoCreate: true })
@@ -25,7 +31,7 @@ export default class SurveyAnswer extends BaseModel {
   public updatedAt: DateTime
 
   @beforeCreate()
-  public static async createUUID (model: SurveyAnswer) {
+  public static async createUUID (model: Answer) {
     model.id = uuid()
   }
 }
