@@ -1,6 +1,6 @@
 {
   "name": "satheler-survey",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "build/server.js",
   "author": "Gustavo Bittencourt Satheler <gustavosatheler@gmail.com>",
   "license": "MIT",
