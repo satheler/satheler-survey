@@ -23,8 +23,8 @@ export default Env.rules({
   /**
    * Application
    */
-  HOST: Env.schema.string({ format: 'host' }),
-  PORT: Env.schema.number(),
+  HOST: Env.schema.string.optional({ format: 'host' }),
+  PORT: Env.schema.number.optional(),
   APP_NAME: Env.schema.string(),
   APP_KEY: Env.schema.string(),
 
