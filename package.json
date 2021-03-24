@@ -13,7 +13,9 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "dev": "node ace serve --watch",
-    "lint": "eslint . --ext=.ts"
+    "lint": "eslint . --ext=.ts",
+    "deploy": "rimraf temp/layers && yarn layer:node_modules && yarn sls deploy",
+    "layer:node_modules": "yarn install --modules-folder ./tmp/layers/nodejs/node_modules --production=true"
   },
   "dependencies": {
     "@adonisjs/auth": "^5.1.1",
