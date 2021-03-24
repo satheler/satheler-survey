@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { ServerContract } from '@ioc:Adonis/Core/Server'
 import { Ignitor } from '@adonisjs/core/build/standalone'
-import AwsAdapter from './start/adapters/AwsLambdaAdapter'
+import { ServerlessComposite } from './start/serverless/ServerlessComposite'
 
 let server: ServerContract
 
@@ -20,8 +20,9 @@ async function bootstrapServer () {
   return server
 }
 
-export const handle = async (event: any, _context: any, callback: any) => {
-  const { request, response } = AwsAdapter(event, callback)
+export const handle = async (...args: any[]) => {
+  const serverless = new ServerlessComposite()
+  const { request, response } = serverless.handle(args)
 
   if(!server) {
     server = await bootstrapServer()
