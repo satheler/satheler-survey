@@ -1,7 +1,6 @@
-'use strict'
-
-const Stream = require('stream')
-const queryString = require('querystring')
+// @ts-nocheck
+import Stream from 'stream'
+import queryString from 'querystring'
 
 type ResponseType = {
   headers?: Record<string, string | string[]>
@@ -14,24 +13,24 @@ type ResponseType = {
 
 export default (event, callback) => {
   const { version = '1.0' } = event
-  const isBase64Encoded = process.env.BINARY_SUPPORT === 'yes'
-  const responseInitialValues: ResponseType = {
-    headers: {},
-    multiValueHeaders: {},
-    body: Buffer.from(''),
-    isBase64Encoded,
-    statusCode: 200,
-    ...(version === '1.0' && { multiValueHeaders: {} }),
-    ...(version === '2.0' && { headers: {} }),
-  }
 
+  const request: IncomingMessage = makeRequest(version, event, callback)
+  const response: ServerResponse = makeResponse(version, event, callback)
+
+  return { request, response }
+}
+
+function makeRequest (version: string, event: any) {
+  const isBase64Encoded = process.env.BINARY_SUPPORT === 'yes'
   const request = new Stream.Readable()
 
-  request.url = (version === '2.0'
+  const REMOVE_STAGE_PATTERN = new RegExp(`^/${event.requestContext.stage}(/)?`)
+
+  const urlByVersion = version === '2.0'
     ? event.requestContext.http.path || event.rawPath || '/'
     : event.requestContext.path || event.path || event.rawPath || '/'
-  ).replace(new RegExp('^/' + event.requestContext.stage), '')
 
+  request.url = urlByVersion.replace(REMOVE_STAGE_PATTERN, '/')
   request.finished = true
 
   if (version === '1.0') {
@@ -73,6 +72,62 @@ export default (event, callback) => {
   request.getHeader = name => request.headers[name.toLowerCase()]
   request.getHeaders = () => request.headers
   request.connection = {}
+
+  if (event.body) {
+    request.push(event.body, event.isBase64Encoded ? 'base64' : undefined)
+    request.push(null)
+  }
+
+  return request
+}
+
+function fixApiGatewayHeaders (version: string, responseInitialValues: any) {
+  const isBase64Encoded = process.env.BINARY_SUPPORT === 'yes'
+  if (version === '1.0') {
+    const { multiValueHeaders } = responseInitialValues
+
+    if(!multiValueHeaders || Object.keys(multiValueHeaders).length === 0 || multiValueHeaders.constructor !== Object){
+      return
+    }
+
+    for (const key of Object.keys(multiValueHeaders)) {
+      if (!Array.isArray(multiValueHeaders[key])) {
+        multiValueHeaders[key] = [multiValueHeaders[key] as string]
+      }
+    }
+
+    return
+  }
+
+  const cookies = responseInitialValues.headers?.['set-cookie']
+  if (cookies) {
+    responseInitialValues.cookies = Array.isArray(cookies) ? cookies : [cookies]
+    delete responseInitialValues.headers?.['set-cookie']
+  }
+
+  const { headers } = responseInitialValues
+  if(!headers || Object.keys(headers).length === 0 || headers.constructor !== Object) {
+    return
+  }
+
+  for (const key of Object.keys(headers)) {
+    if (Array.isArray(headers[key])) {
+      headers[key] = (headers[key] as string[]).join(',')
+    }
+  }
+}
+
+function makeResponse (version: string, event: any, callback: Function) {
+  const isBase64Encoded = process.env.BINARY_SUPPORT === 'yes'
+  const responseInitialValues: ResponseType = {
+    headers: {},
+    multiValueHeaders: {},
+    body: Buffer.from(''),
+    isBase64Encoded,
+    statusCode: 200,
+    ...(version === '1.0' && { multiValueHeaders: {} }),
+    ...(version === '2.0' && { headers: {} }),
+  }
 
   const response = new Stream()
   let headersSent = false
@@ -130,50 +185,9 @@ export default (event, callback) => {
     }
 
     response.writeHead(responseInitialValues.statusCode)
-    fixApiGatewayHeaders()
+    fixApiGatewayHeaders(version, responseInitialValues)
     callback(null, responseInitialValues)
   }
 
-  if (event.body) {
-    console.log(event.body)
-    request.push(event.body, event.isBase64Encoded ? 'base64' : undefined)
-    request.push(null)
-  }
-
-  function fixApiGatewayHeaders () {
-    if (version === '1.0') {
-      const { multiValueHeaders } = responseInitialValues
-
-      if(!multiValueHeaders || Object.keys(multiValueHeaders).length === 0 || multiValueHeaders.constructor !== Object){
-        return
-      }
-
-      for (const key of Object.keys(multiValueHeaders)) {
-        if (!Array.isArray(multiValueHeaders[key])) {
-          multiValueHeaders[key] = [multiValueHeaders[key] as string]
-        }
-      }
-
-      return
-    }
-
-    const cookies = responseInitialValues.headers?.['set-cookie']
-    if (cookies) {
-      responseInitialValues.cookies = Array.isArray(cookies) ? cookies : [cookies]
-      delete responseInitialValues.headers?.['set-cookie']
-    }
-
-    const { headers } = responseInitialValues
-    if(!headers || Object.keys(headers).length === 0 || headers.constructor !== Object) {
-      return
-    }
-
-    for (const key of Object.keys(headers)) {
-      if (Array.isArray(headers[key])) {
-        headers[key] = (headers[key] as string[]).join(',')
-      }
-    }
-  }
-
-  return { request, response }
+  return response
 }
