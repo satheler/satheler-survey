@@ -38,6 +38,9 @@
     "husky": "4",
     "lint-staged": "^10.5.4",
     "pino-pretty": "^4.7.1",
+    "rimraf": "^3.0.2",
+    "serverless": "^2.30.3",
+    "serverless-offline": "^6.8.0",
     "typescript": "~4.1",
     "youch": "^2.1.1",
     "youch-terminal": "^1.0.1"
