@@ -43,9 +43,4 @@ export default Env.rules({
    * Security
    */
   HASH_DRIVER: Env.schema.enum(['bcrypt', 'argon'] as const),
-
-  /**
-   * Cloud
-   */
-  CLOUD_PROVIDER: Env.schema.string.optional(),
 })
