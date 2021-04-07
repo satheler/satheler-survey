@@ -13,6 +13,35 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+
+    APP_KEY: ${env:APP_KEY}
+    APP_NAME: ${env:APP_NAME}
+
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+
+    AZURE_SUBSCRIPTION_ID: ${env:AZURE_SUBSCRIPTION_ID}
+    AZURE_TENANT_ID: ${env:AZURE_TENANT_ID}
+    AZURE_CLIENT_ID: ${env:AZURE_CLIENT_ID}
+    AZURE_CLIENT_SECRET: ${env:AZURE_CLIENT_SECRET}
+
+    HASH_DRIVER: ${env:HASH_DRIVER}
+
+    DB_CLIENT: ${env:DB_CLIENT}
+
+    DB_AWS_HOST: ${env:DB_AWS_HOST}
+    DB_AWS_PORT: ${env:DB_AWS_PORT}
+    DB_AWS_USER: ${env:DB_AWS_USER}
+    DB_AWS_PASSWORD: ${env:DB_AWS_PASSWORD}
+    DB_AWS_NAME: ${env:DB_AWS_NAME}
+
+    DB_AZURE_HOST: ${env:DB_AZURE_HOST}
+    DB_AZURE_PORT: ${env:DB_AZURE_PORT}
+    DB_AZURE_USER: ${env:DB_AZURE_USER}
+    DB_AZURE_PASSWORD: ${env:DB_AZURE_PASSWORD}
+    DB_AZURE_NAME: ${env:DB_AZURE_NAME}
 
 functions:
   app:
