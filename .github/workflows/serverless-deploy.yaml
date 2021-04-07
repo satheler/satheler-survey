@@ -22,6 +22,38 @@ jobs:
     - name: Build project
       run: yarn build
 
+    - name: Create environment variables
+      run: |
+        touch .env
+        echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+
+        echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+        echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
+
+        echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+        echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+
+        echo "AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> .env
+        echo "AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> .env
+        echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> .env
+        echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> .env
+
+        echo "HASH_DRIVER=${{ secrets.HASH_DRIVER }}" >> .env
+
+        echo "DB_CLIENT=${{ secrets.DB_CLIENT }}" >> .env
+
+        echo "DB_AWS_HOST=${{ secrets.DB_AWS_HOST }}" >> .env
+        echo "DB_AWS_PORT=${{ secrets.DB_AWS_PORT }}" >> .env
+        echo "DB_AWS_USER=${{ secrets.DB_AWS_USER }}" >> .env
+        echo "DB_AWS_PASSWORD=${{ secrets.DB_AWS_PASSWORD }}" >> .env
+        echo "DB_AWS_NAME=${{ secrets.DB_AWS_NAME }}" >> .env
+
+        echo "DB_AZURE_HOST=${{ secrets.DB_AZURE_HOST }}" >> .env
+        echo "DB_AZURE_PORT=${{ secrets.DB_AZURE_PORT }}" >> .env
+        echo "DB_AZURE_USER=${{ secrets.DB_AZURE_USER }}" >> .env
+        echo "DB_AZURE_PASSWORD=${{ secrets.DB_AZURE_PASSWORD }}" >> .env
+        echo "DB_AZURE_NAME=${{ secrets.DB_AZURE_NAME }}" >> .env
+
     - name: Deploy to AWS with Serverless
       run: yarn deploy:aws
       env:
@@ -33,11 +65,6 @@ jobs:
         DB_CONNECTION: azure
 
     env:
-      NODE_ENV: ${{ secrets.NODE_ENV }}
-
-      APP_KEY: ${{ secrets.APP_KEY }}
-      APP_NAME: ${{ secrets.APP_NAME }}
-
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -45,21 +72,5 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-
-      HASH_DRIVER: ${{ secrets.HASH_DRIVER }}
-
-      DB_CLIENT: ${{ secrets.DB_CLIENT }}
-
-      DB_AWS_HOST: ${{ secrets.DB_AWS_HOST }}
-      DB_AWS_PORT: ${{ secrets.DB_AWS_PORT }}
-      DB_AWS_USER: ${{ secrets.DB_AWS_USER }}
-      DB_AWS_PASSWORD: ${{ secrets.DB_AWS_PASSWORD }}
-      DB_AWS_NAME: ${{ secrets.DB_AWS_NAME }}
-
-      DB_AZURE_HOST: ${{ secrets.DB_AZURE_HOST }}
-      DB_AZURE_PORT: ${{ secrets.DB_AZURE_PORT }}
-      DB_AZURE_USER: ${{ secrets.DB_AZURE_USER }}
-      DB_AZURE_PASSWORD: ${{ secrets.DB_AZURE_PASSWORD }}
-      DB_AZURE_NAME: ${{ secrets.DB_AZURE_NAME }}
 
 
