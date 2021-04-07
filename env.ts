@@ -31,16 +31,16 @@ export default Env.rules({
   /**
    * Database
    */
-  DB_CONNECTION: Env.schema.string(),
-  PG_HOST: Env.schema.string({ format: 'host' }),
-  PG_PORT: Env.schema.number(),
-  PG_USER: Env.schema.string(),
-  PG_PASSWORD: Env.schema.string(),
-  PG_DB_NAME: Env.schema.string(),
+  DB_CLIENT: Env.schema.enum.optional(['pg', 'postgres', 'postgresql', 'mysql', 'mysql2'] as const),
+  DB_CONNECTION: Env.schema.string.optional(),
+  DB_HOST: Env.schema.string.optional({ format: 'host' }),
+  DB_PORT: Env.schema.number.optional(),
+  DB_USER: Env.schema.string.optional(),
+  DB_PASSWORD: Env.schema.string.optional(),
+  DB_NAME: Env.schema.string.optional(),
 
   /**
    * Security
    */
   HASH_DRIVER: Env.schema.enum(['bcrypt', 'argon'] as const),
-
 })

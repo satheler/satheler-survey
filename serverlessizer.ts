@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { ServerContract } from '@ioc:Adonis/Core/Server'
 import { Ignitor } from '@adonisjs/core/build/standalone'
-import { ServerlessComposite } from './start/serverless/ServerlessComposite'
+import Serverlessize from '@satheler/s12r'
 
 let server: ServerContract
 
@@ -21,12 +21,10 @@ async function bootstrapServer () {
 }
 
 export const handle = async (...args: any[]) => {
-  const serverless = new ServerlessComposite()
-  const { request, response } = serverless.handle(args)
-
   if(!server) {
     server = await bootstrapServer()
   }
 
+  const { request, response } = Serverlessize(args)
   return server.handle(request, response)
 }

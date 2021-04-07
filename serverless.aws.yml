@@ -4,7 +4,7 @@ provider:
   name: aws
   region: ${opt:region, 'sa-east-1'}
   stage: ${opt:stage, 'develop'}
-  runtime: nodejs14.x
+  runtime: nodejs12.x
   stackName: ${self:provider.stage}-${self:service}
   apiName: ${self:provider.stage}-${self:service}
   timeout: 10
@@ -15,19 +15,10 @@ provider:
     lambda: true
   environment:
     NODE_ENV: production
-    APP_KEY: ns7WL-0yD-JeK-LWlgJ_SueMXwCgbb-0
-    APP_NAME: satheler-survey-local
-    DB_CONNECTION: main
-    PG_HOST: 0.0.0.0
-    PG_PORT: 5432
-    PG_USER: postgres
-    PG_PASSWORD: docker
-    PG_DB_NAME: satheler_survey
-    HASH_DRIVER: bcrypt
 
 functions:
   app:
-    handler: build/serverless.handle
+    handler: build/serverlessizer.handle
     layers:
       - { Ref: NodeModulesLambdaLayer }
     events:

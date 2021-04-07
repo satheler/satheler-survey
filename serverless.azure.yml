@@ -1,0 +1,37 @@
+service: satheler-survey
+
+provider:
+  name: azure
+  region: ${opt:region, 'sa-east-1'}
+  runtime: nodejs12
+  stage: ${opt:stage, 'develop'}
+  stackName: ${self:provider.stage}-${self:service}
+  apiName: ${self:provider.stage}-${self:service}
+  timeout: 10
+  memorySize: 256
+  versionFunctions: false
+  environment:
+    NODE_ENV: production
+  apim: true
+
+functions:
+  app:
+    handler: build/serverlessizer.handle
+    events:
+      - http: true
+        route: '{*proxy}'
+        authLevel: anonymous
+
+package:
+  include:
+    - build/**
+
+  exclude:
+    - '**/*.ts'
+    - node_modules/**
+    - tmp/**
+    - app/**
+
+plugins:
+  - serverless-azure-functions
+  - serverless-offline

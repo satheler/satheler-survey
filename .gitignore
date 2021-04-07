@@ -7,3 +7,7 @@ coverage
 tmp
 .build
 .serverless
+
+# Azure Functions Local
+host.json
+local.settings.json
