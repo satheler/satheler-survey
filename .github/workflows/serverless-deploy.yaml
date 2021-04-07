@@ -23,12 +23,12 @@ jobs:
       run: yarn build
 
     - name: Deploy to AWS with Serverless
-      run: yarn deploy -c serverless.aws.yml
+      run: yarn deploy:aws
       env:
         DB_CONNECTION: aws
 
     - name: Deploy to Azure with Serverless
-      run: yarn deploy -c serverless.azure.yml
+      run: yarn deploy:azure
       env:
         DB_CONNECTION: azure
 
