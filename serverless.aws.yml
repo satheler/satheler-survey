@@ -13,8 +13,6 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
-  environment:
-    NODE_ENV: production
 
 functions:
   app:
