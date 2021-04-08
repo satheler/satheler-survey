@@ -2,34 +2,49 @@ service: satheler-survey
 
 provider:
   name: azure
-  region: ${opt:region, 'brazilsouth'}
+  location: ${opt:location, 'brazilsouth'}
   runtime: nodejs12
   stage: ${opt:stage, 'develop'}
-  stackName: ${self:provider.stage}-${self:service}
-  apiName: ${self:provider.stage}-${self:service}
-  timeout: 10
   memorySize: 256
-  versionFunctions: false
   apim: true
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+
+    APP_KEY: ${env:APP_KEY}
+    APP_NAME: ${env:APP_NAME}
+
+    HASH_DRIVER: ${env:HASH_DRIVER}
+
+    DB_CONNECTION: azure
+    DB_CLIENT: ${env:DB_CLIENT}
+
+    DB_AWS_HOST: ${env:DB_AWS_HOST}
+    DB_AWS_PORT: ${env:DB_AWS_PORT}
+    DB_AWS_USER: ${env:DB_AWS_USER}
+    DB_AWS_PASSWORD: ${env:DB_AWS_PASSWORD}
+    DB_AWS_NAME: ${env:DB_AWS_NAME}
+
+    DB_AZURE_HOST: ${env:DB_AZURE_HOST}
+    DB_AZURE_PORT: ${env:DB_AZURE_PORT}
+    DB_AZURE_USER: ${env:DB_AZURE_USER}
+    DB_AZURE_PASSWORD: ${env:DB_AZURE_PASSWORD}
+    DB_AZURE_NAME: ${env:DB_AZURE_NAME}
 
 functions:
-  app:
+  build:
     handler: build/serverlessizer.handle
+    apim:
+      operations:
+        - urlTemplate: '/satheler-survey'
+          displayName: SathelerSurvey
     events:
       - http: true
         route: '{*proxy}'
         authLevel: anonymous
 
 package:
-  include:
+  patterns:
     - build/**
-
-  exclude:
-    - '**/*.ts'
-    - node_modules/**
-    - tmp/**
-    - app/**
 
 plugins:
   - serverless-azure-functions
-  - serverless-offline

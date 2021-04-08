@@ -15,7 +15,7 @@
     "dev": "node ace serve --watch",
     "lint": "eslint . --ext=.ts",
     "serverless:start": "yarn build && sls offline",
-    "deploy": "sls deploy",
+    "deploy": "rimraf .serverless && sls deploy",
     "deploy:aws": "rimraf temp/layers && yarn layer:node_modules && yarn deploy -c serverless.aws.yml",
     "deploy:azure": "yarn deploy -c serverless.azure.yml",
     "layer:node_modules": "yarn install --modules-folder ./tmp/layers/nodejs/node_modules --production=true"
@@ -25,7 +25,7 @@
     "@adonisjs/core": "^5.0.4-preview-rc",
     "@adonisjs/lucid": "^10.0.0",
     "@adonisjs/repl": "^1.0.0",
-    "@satheler/s12r": "^0.2.0",
+    "@satheler/s12r": "^0.2.1",
     "luxon": "^1.26.0",
     "pg": "^8.5.1",
     "phc-bcrypt": "^1.0.5",
