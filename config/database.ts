@@ -74,7 +74,7 @@ function makeConnections () {
           password: Env.get(`DB_${key}PASSWORD`, ''),
           database: Env.get(`DB_${key}NAME`),
         },
-        healthCheck: true,
+        healthCheck: alternativeDatabaseName === Env.get('DB_CONNECTION', 'main'),
         debug: true,
       }
 
