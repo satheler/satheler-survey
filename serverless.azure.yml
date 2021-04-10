@@ -1,13 +1,19 @@
 service: satheler-survey
 
+useDotenv: true
+
 provider:
   name: azure
   location: ${opt:location, 'brazilsouth'}
   runtime: nodejs12
   stage: ${opt:stage, 'develop'}
   memorySize: 256
-  apim: true
+  apim:
+    backends:
+      - name: satheler-survey-backend
+        url: ''
   environment:
+    WEBSITE_NODE_DEFAULT_VERSION: ~14
     NODE_ENV: ${env:NODE_ENV}
 
     APP_KEY: ${env:APP_KEY}
@@ -34,8 +40,10 @@ functions:
   build:
     handler: build/serverlessizer.handle
     apim:
+      backend: satheler-survey-backend
       operations:
-        - urlTemplate: '/satheler-survey'
+        - method: '*'
+          urlTemplate: '/satheler-survey'
           displayName: SathelerSurvey
     events:
       - http: true
