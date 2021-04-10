@@ -69,5 +69,10 @@ layers:
     path: tmp/layers
     description: "node_modules dependencies"
 
+custom:
+  customDomain:
+    domainName: ${env:DOMAIN_URL}
+
 plugins:
   - serverless-offline
+  - serverless-domain-manager
