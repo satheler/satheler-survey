@@ -63,7 +63,7 @@ function makeConnections () {
       const alternativeDatabaseName = alternativeDatabaseSplitName[DB_CONNECTION_NAME_POSITION] || 'main'
       const key = alternativeDatabaseName === 'main' ? '' : `${alternativeDatabaseName}_`
 
-      const alternativeDatabaseNameLowercase = alternativeDatabaseName.toLocaleLowerCase()
+      const alternativeDatabaseNameLowercase = alternativeDatabaseName.toLowerCase()
 
       alternativeDatabases[alternativeDatabaseNameLowercase] = {
         client: Env.get('DB_CLIENT', 'pg'),
@@ -74,7 +74,7 @@ function makeConnections () {
           password: Env.get(`DB_${key}PASSWORD`, ''),
           database: Env.get(`DB_${key}NAME`),
         },
-        healthCheck: alternativeDatabaseName === Env.get('DB_CONNECTION', 'main'),
+        healthCheck: alternativeDatabaseNameLowercase === Env.get('DB_CONNECTION', 'main'),
         debug: true,
       }
 
