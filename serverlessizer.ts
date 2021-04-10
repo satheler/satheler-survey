@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import execa from 'execa'
 import { ServerContract } from '@ioc:Adonis/Core/Server'
 import { Ignitor } from '@adonisjs/core/build/standalone'
 import Serverlessize from '@satheler/s12r'
@@ -20,9 +21,14 @@ async function bootstrapServer () {
   return server
 }
 
+function runMigration () {
+  execa.commandSync('node ace migration:run --force')
+}
+
 export const handle = async (...args: any[]) => {
   if(!server) {
     server = await bootstrapServer()
+    runMigration()
   }
 
   const { request, response } = Serverlessize(args)
