@@ -1,11 +1,9 @@
 service: satheler-survey
 
-useDotenv: true
-
 provider:
   name: azure
   location: ${opt:location, 'brazilsouth'}
-  runtime: nodejs12
+  runtime: nodejs14
   stage: ${opt:stage, 'develop'}
   memorySize: 256
   apim:
@@ -13,7 +11,6 @@ provider:
       - name: satheler-survey-backend
         url: ''
   environment:
-    WEBSITE_NODE_DEFAULT_VERSION: ~14
     NODE_ENV: ${env:NODE_ENV}
 
     APP_KEY: ${env:APP_KEY}
