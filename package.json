@@ -16,7 +16,7 @@
     "lint": "eslint . --ext=.ts",
     "serverless:start": "yarn build && sls offline",
     "deploy": "rimraf .serverless && sls deploy",
-    "deploy:aws": "rimraf temp/layers && yarn layer:node_modules && yarn deploy -c serverless.aws.yml",
+    "deploy:aws": "rimraf tmp/layers && yarn layer:node_modules && yarn deploy -c serverless.aws.yml",
     "deploy:azure": "yarn deploy -c serverless.azure.yml",
     "layer:node_modules": "yarn install --modules-folder ./tmp/layers/nodejs/node_modules --production=true"
   },
