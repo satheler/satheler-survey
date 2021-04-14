@@ -1,12 +1,10 @@
 service: satheler-survey
 
-useDotenv: true
-
 provider:
   name: aws
   region: ${opt:region, 'sa-east-1'}
   stage: ${opt:stage, 'develop'}
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   stackName: ${self:provider.stage}-${self:service}
   apiName: ${self:provider.stage}-${self:service}
   timeout: 10
