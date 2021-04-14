@@ -14,7 +14,7 @@
     "start": "node server.js",
     "dev": "node ace serve --watch",
     "lint": "eslint . --ext=.ts",
-    "serverless:start": "yarn build && sls offline",
+    "serverless:start": "yarn build && sls offline -c serverless.aws.yml",
     "deploy": "rimraf .serverless && sls deploy",
     "deploy:aws": "rimraf tmp/layers && yarn layer:node_modules && yarn deploy -c serverless.aws.yml",
     "deploy:azure": "yarn deploy -c serverless.azure.yml",
