@@ -11,11 +11,12 @@ async function bootstrapServer () {
 
   httpServer.application.setup()
   httpServer.application.registerProviders()
-  httpServer.application.requirePreloads()
   await httpServer.application.bootProviders()
+  httpServer.application.requirePreloads()
 
   const server = httpServer.application.container.use('Adonis/Core/Server')
   server.optimize()
+  server.errorHandler('App/Exceptions/ExceptionHandler')
 
   return server
 }
