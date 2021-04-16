@@ -24,7 +24,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   public async handle (error, context: HttpContextContract) {
     const { response } = context
-    Logger.error(`Error code: ${error.code}`)
+    context.logger.error(`Error code: ${error.code}`)
     switch (error.code) {
       case '23505':
         // PostgreSQL Error: Duplicate key value that violates unique constraint
@@ -38,7 +38,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
       case 'E_UNAUTHORIZED_ACCESS':
         return response.unauthorized({ message: 'Unauthorized' })
       default:
-        return super.handle(error, context)
+        return response.badRequest({ message: error.message })
     }
   }
 }

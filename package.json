@@ -1,6 +1,6 @@
 {
   "name": "satheler-survey",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "build/server.js",
   "author": "Gustavo Bittencourt Satheler <gustavosatheler@gmail.com>",
   "license": "MIT",
@@ -13,13 +13,20 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "dev": "node ace serve --watch",
-    "lint": "eslint . --ext=.ts"
+    "lint": "eslint . --ext=.ts",
+    "serverless:start": "yarn build && sls offline -c serverless.aws.yml",
+    "deploy": "rimraf .serverless && sls deploy",
+    "deploy:aws": "rimraf tmp/layers && yarn layer:node_modules && yarn deploy -c serverless.aws.yml",
+    "deploy:azure": "yarn deploy -c serverless.azure.yml",
+    "layer:node_modules": "yarn install --modules-folder ./tmp/layers/nodejs/node_modules --production=true"
   },
   "dependencies": {
     "@adonisjs/auth": "^5.1.1",
     "@adonisjs/core": "^5.0.4-preview-rc",
     "@adonisjs/lucid": "^10.0.0",
     "@adonisjs/repl": "^1.0.0",
+    "@satheler/s12r": "^0.2.3",
+    "execa": "^5.0.0",
     "luxon": "^1.26.0",
     "pg": "^8.5.1",
     "phc-bcrypt": "^1.0.5",
@@ -38,12 +45,17 @@
     "husky": "4",
     "lint-staged": "^10.5.4",
     "pino-pretty": "^4.7.1",
+    "rimraf": "^3.0.2",
+    "serverless": "^2.35.0",
+    "serverless-azure-functions": "git+https://github.com/satheler/serverless-azure-functions.git#nodejs14",
+    "serverless-domain-manager": "^5.1.0",
+    "serverless-offline": "^6.9.0",
     "typescript": "~4.1",
     "youch": "^2.1.1",
     "youch-terminal": "^1.0.1"
   },
   "engines": {
-    "node": "14.x"
+    "node": ">=12.x"
   },
   "husky": {
     "hooks": {

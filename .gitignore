@@ -5,3 +5,9 @@ coverage
 .DS_STORE
 .env
 tmp
+.build
+.serverless
+.local.*
+
+# Azure Functions Local
+local.settings.json

@@ -9,6 +9,8 @@ import Env from '@ioc:Adonis/Core/Env'
 import { OrmConfig } from '@ioc:Adonis/Lucid/Orm'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
+const connections = makeConnections()
+
 const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   /*
   |--------------------------------------------------------------------------
@@ -20,33 +22,18 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   | file.
   |
   */
-  connection: Env.get('DB_CONNECTION'),
+  connection: Env.get('DB_CONNECTION', 'main'),
 
-  connections: {
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Database config
     |--------------------------------------------------------------------------
     |
     | Configuration for PostgreSQL database. Make sure to install the driver
-    | from npm when using this connection
-    |
-    | npm i pg
+    | from npm when using this connection.
     |
     */
-    main: {
-      client: 'pg',
-      connection: {
-        host: Env.get('PG_HOST'),
-        port: Env.get('PG_PORT'),
-        user: Env.get('PG_USER'),
-        password: Env.get('PG_PASSWORD', ''),
-        database: Env.get('PG_DB_NAME'),
-      },
-      healthCheck: true,
-      debug: Env.get('NODE_ENV') === 'development',
-    },
-  },
+  connections,
 
   /*
   |--------------------------------------------------------------------------
@@ -60,8 +47,37 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   | - Or define a custom function to compute the primary key for a given model.
   |
   */
-  orm: {
-  },
+  orm: {},
 }
 
 export default databaseConfig
+
+function makeConnections () {
+  const ALTERNATIVE_DATABASE_PATTERN = /^DB_((.+)_)?HOST$/
+
+  return Object.keys(process.env)
+    .filter(environmentVariable => ALTERNATIVE_DATABASE_PATTERN.test(environmentVariable))
+    .reduce<DatabaseConfig['connections']>((alternativeDatabases, alternativeDatabase) => {
+      const DB_CONNECTION_NAME_POSITION = 2
+      const alternativeDatabaseSplitName = alternativeDatabase.split(ALTERNATIVE_DATABASE_PATTERN)
+      const alternativeDatabaseName = alternativeDatabaseSplitName[DB_CONNECTION_NAME_POSITION] || 'main'
+      const key = alternativeDatabaseName === 'main' ? '' : `${alternativeDatabaseName}_`
+
+      const alternativeDatabaseNameLowercase = alternativeDatabaseName.toLowerCase()
+
+      alternativeDatabases[alternativeDatabaseNameLowercase] = {
+        client: Env.get('DB_CLIENT', 'pg'),
+        connection: {
+          host: Env.get(`DB_${key}HOST`),
+          port: Env.get(`DB_${key}PORT`),
+          user: Env.get(`DB_${key}USER`),
+          password: Env.get(`DB_${key}PASSWORD`, ''),
+          database: Env.get(`DB_${key}NAME`),
+        },
+        healthCheck: alternativeDatabaseNameLowercase === Env.get('DB_CONNECTION', 'main'),
+        debug: true,
+      }
+
+      return alternativeDatabases
+    }, {})
+}
