@@ -1,9 +1,8 @@
 import 'reflect-metadata'
-import { ServerContract } from '@ioc:Adonis/Core/Server'
 import { Ignitor } from '@adonisjs/core/build/standalone'
 import Serverlessize from '@satheler/s12r'
 
-let server: ServerContract
+let server: Function
 
 async function bootstrapServer () {
   const ignitor = new Ignitor(__dirname)
@@ -14,10 +13,11 @@ async function bootstrapServer () {
   await httpServer.application.bootProviders()
   httpServer.application.requirePreloads()
 
-  const server = httpServer.application.container.use('Adonis/Core/Server')
-  server.optimize()
-  server.errorHandler('App/Exceptions/ExceptionHandler')
+  const serverCore = httpServer.application.container.use('Adonis/Core/Server')
+  serverCore.errorHandler('App/Exceptions/ExceptionHandler')
+  serverCore.optimize()
 
+  const server = serverCore.handle.bind(serverCore)
   return server
 }
 
@@ -27,5 +27,5 @@ export const handle = async (...args: any[]) => {
   }
 
   const { request, response } = Serverlessize(args)
-  return server.handle(request, response)
+  return server(request, response)
 }
