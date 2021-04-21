@@ -2,24 +2,40 @@ import Event from '@ioc:Adonis/Core/Event'
 
 import Database, { ConnectionNode } from '@ioc:Adonis/Lucid/Database'
 
+type DataRedendancy = {
+  sql: string
+  bindings?: any[]
+}
+
 const REPLICATION_DATA_METHODS = ['insert', 'update', 'delete']
+const replicationDataQueue: DataRedendancy[] = []
 
-async function replicateData (connection: ConnectionNode, sql: string, bindings?: any[]) {
-  const { connectionName } = Database.connection()
+const { connectionName: mainConnection } = Database.connection()
+const databaseConnections = new Map(Database.manager.connections)
+databaseConnections.delete(mainConnection)
 
-  if(connection.name === connectionName) {
+setInterval(() => {
+  if (replicationDataQueue.length === 0) {
     return
   }
 
-  await Database.connection(connection.name).rawQuery(sql, bindings)
+  const { sql, bindings } = replicationDataQueue[0]!
+
+  databaseConnections.forEach(connection => {
+    replicateData(connection, sql, bindings)
+      .then(() => replicationDataQueue.shift())
+      .catch(() => {})
+  })
+}, 1000)
+
+async function replicateData (connection: ConnectionNode, sql: string, bindings?: any[]) {
+  return Database.connection(connection.name).rawQuery(sql, bindings)
 }
 
 Event.on('db:query', ({ method, sql, bindings }) => {
-  if(!REPLICATION_DATA_METHODS.includes(method)) {
+  if (!REPLICATION_DATA_METHODS.includes(method)) {
     return
   }
 
-  Database.manager.connections.forEach(connection => {
-    setTimeout(async () => await replicateData(connection, sql, bindings), 2000)
-  })
+  replicationDataQueue.push({ sql, bindings })
 })
