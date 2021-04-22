@@ -945,10 +945,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@satheler/s12r@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@satheler/s12r/-/s12r-0.2.5.tgz#e816bcff1ec56a7015ef1c0f560ce610c40124d5"
-  integrity sha512-UL3BdgU8xQIrgFXRcZiyUJpxnkyPHg12x2rRSq5R2cg2vHHFxXhxEBRiwI5yNgRJRQhrYnBZxhj4hbBN7sAphQ==
+"@satheler/s12r@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@satheler/s12r/-/s12r-0.2.6.tgz#f64c70de0174562423105d3c68bf64395b8b3b76"
+  integrity sha512-nXvVjt+DIFA3kv8URikd0y0X6FEU5Bm/nlZ0qFiao2zPU7Ge4fhULp/U5uHn8vvF1EzqxKwLUrVqdAjAhYCRpg==
 
 "@serverless/cli@^1.5.2":
   version "1.5.2"
