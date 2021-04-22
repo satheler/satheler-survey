@@ -11,8 +11,8 @@ provider:
   memorySize: 256
   versionFunctions: false
   tracing:
-    apiGateway: true
-    lambda: true
+    apiGateway: false
+    lambda: false
   environment:
     NODE_ENV: ${env:NODE_ENV}
 
