@@ -11,8 +11,8 @@ provider:
   memorySize: 256
   versionFunctions: false
   tracing:
-    apiGateway: false
-    lambda: false
+    apiGateway: true
+    lambda: true
   environment:
     NODE_ENV: ${env:NODE_ENV}
 
@@ -69,10 +69,5 @@ layers:
     path: tmp/layers
     description: "node_modules dependencies"
 
-custom:
-  customDomain:
-    domainName: ${env:DOMAIN_URL}
-
 plugins:
   - serverless-offline
-  - serverless-domain-manager
