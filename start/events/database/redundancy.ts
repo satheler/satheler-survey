@@ -26,7 +26,7 @@ setInterval(() => {
       .then(() => replicationDataQueue.shift())
       .catch(() => {})
   })
-}, 1000)
+}, 200)
 
 async function replicateData (connection: ConnectionNode, sql: string, bindings?: any[]) {
   return Database.connection(connection.name).rawQuery(sql, bindings)
