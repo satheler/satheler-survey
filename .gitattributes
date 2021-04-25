@@ -4,3 +4,4 @@ tests/load/20min-250users-with-dns/result.csv filter=lfs diff=lfs merge=lfs -tex
 tests/load/20min-250users-without-dns/result.csv filter=lfs diff=lfs merge=lfs -text
 tests/load/20min-500users-with-dns/result.csv filter=lfs diff=lfs merge=lfs -text
 tests/load/20min-500users-without-dns/result.csv filter=lfs diff=lfs merge=lfs -text
+tests/load/1h-100users-without-dns/result.csv filter=lfs diff=lfs merge=lfs -text
