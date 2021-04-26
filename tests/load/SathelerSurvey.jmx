@@ -22,22 +22,22 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="numberOfUsers" elementType="Argument">
             <stringProp name="Argument.name">numberOfUsers</stringProp>
-            <stringProp name="Argument.value">100</stringProp>
+            <stringProp name="Argument.value">500</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="durationInSeconds" elementType="Argument">
             <stringProp name="Argument.name">durationInSeconds</stringProp>
-            <stringProp name="Argument.value">1200</stringProp>
+            <stringProp name="Argument.value">3600</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="disableCloudTimeInSeconds" elementType="Argument">
             <stringProp name="Argument.name">disableCloudTimeInSeconds</stringProp>
-            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.value">1200</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="restoreCloudTimeInSeconds" elementType="Argument">
             <stringProp name="Argument.name">restoreCloudTimeInSeconds</stringProp>
-            <stringProp name="Argument.value">5</stringProp>
+            <stringProp name="Argument.value">2100</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
