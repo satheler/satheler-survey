@@ -11,3 +11,7 @@ tmp
 
 # Azure Functions Local
 local.settings.json
+
+# Ignore html generate tests
+tests/**/html
+tests/**/*.log
