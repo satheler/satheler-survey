@@ -1,4 +1,4 @@
-service: satheler-survey
+service: az-satheler-survey
 
 provider:
   name: azure
