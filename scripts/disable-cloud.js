@@ -4,10 +4,11 @@ exports.handler = async (event) => {
   const lambda = new AWS.Lambda()
 
   const FunctionName = 'satheler-survey-develop-app'
+  const MAX_RESERVED_CONCURRENT_EXECUTIONS = 75
 
-  if (event.httpMethod === 'GET') {
+  if (event.requestContext.http.method === 'GET') {
     const { ReservedConcurrentExecutions } = await lambda.getFunctionConcurrency({ FunctionName }).promise()
-    const isActive = ReservedConcurrentExecutions === null
+    const isActive = ReservedConcurrentExecutions === MAX_RESERVED_CONCURRENT_EXECUTIONS
 
     return {
       statusCode: 200,
@@ -25,7 +26,9 @@ exports.handler = async (event) => {
   }
 
   if (body.is_active) {
-    await lambda.deleteFunctionConcurrency({ FunctionName }).promise()
+    await lambda
+      .putFunctionConcurrency({ FunctionName, ReservedConcurrentExecutions: MAX_RESERVED_CONCURRENT_EXECUTIONS })
+      .promise()
   } else {
     await lambda.putFunctionConcurrency({ FunctionName, ReservedConcurrentExecutions: 0 }).promise()
   }

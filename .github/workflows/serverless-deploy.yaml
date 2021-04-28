@@ -58,6 +58,10 @@ jobs:
         DB_AZURE_PASSWORD: ${{ secrets.DB_AZURE_PASSWORD }}
         DB_AZURE_NAME: ${{ secrets.DB_AZURE_NAME }}
 
+    - name: Run database migration
+      run: |
+          node ace migration:run --force
+
   deploy-azure:
     runs-on: windows-latest
     steps:
@@ -106,3 +110,7 @@ jobs:
         DB_AZURE_USER: ${{ secrets.DB_AZURE_USER }}
         DB_AZURE_PASSWORD: ${{ secrets.DB_AZURE_PASSWORD }}
         DB_AZURE_NAME: ${{ secrets.DB_AZURE_NAME }}
+
+    - name: Run database migration
+      run: |
+          node ace migration:run --force

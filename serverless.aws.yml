@@ -52,16 +52,22 @@ functions:
           method: any
 
 package:
-  include:
-    - build/**
-
-  exclude:
-    - '**/*.ts'
-    - node_modules/**
-    - tmp/**
-    - app/**
-    - .github/**
-    - .vscode/**
+  patterns:
+    - 'build/**'
+    - '!node_modules/**'
+    - '!.github/**'
+    - '!.vscode/**'
+    - '!app/**'
+    - '!commands/**'
+    - '!config/**'
+    - '!contracts/**'
+    - '!database/**'
+    - '!providers/**'
+    - '!scripts/**'
+    - '!start/**'
+    - '!tests/**'
+    - '!tmp/**'
+    - '!./*'
 
 layers:
   NodeModules:

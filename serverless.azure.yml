@@ -49,7 +49,21 @@ functions:
 
 package:
   patterns:
-    - build/**
+    - 'build/**'
+    - '!node_modules/**'
+    - '!.github/**'
+    - '!.vscode/**'
+    - '!app/**'
+    - '!commands/**'
+    - '!config/**'
+    - '!contracts/**'
+    - '!database/**'
+    - '!providers/**'
+    - '!scripts/**'
+    - '!start/**'
+    - '!tests/**'
+    - '!tmp/**'
+    - '!./*'
 
 plugins:
   - serverless-azure-functions
