@@ -54,6 +54,7 @@ export default databaseConfig
 
 function makeConnections () {
   const ALTERNATIVE_DATABASE_PATTERN = /^DB_((.+)_)?HOST$/
+  const secondsToMilliseconds = (seconds: number) => seconds * 1000
 
   return Object.keys(process.env)
     .filter(environmentVariable => ALTERNATIVE_DATABASE_PATTERN.test(environmentVariable))
@@ -74,6 +75,10 @@ function makeConnections () {
           password: Env.get(`DB_${key}PASSWORD`, ''),
           database: Env.get(`DB_${key}NAME`),
         },
+        pool: {
+          idleTimeoutMillis: secondsToMilliseconds(2),
+        },
+
         healthCheck: alternativeDatabaseNameLowercase === Env.get('DB_CONNECTION', 'main'),
         debug: true,
       }
