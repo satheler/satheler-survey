@@ -76,7 +76,7 @@ function makeConnections () {
           database: Env.get(`DB_${key}NAME`),
         },
         pool: {
-          idleTimeoutMillis: 500,
+          idleTimeoutMillis: 0,
         },
         healthCheck: alternativeDatabaseNameLowercase === Env.get('DB_CONNECTION', 'main'),
         debug: true,
