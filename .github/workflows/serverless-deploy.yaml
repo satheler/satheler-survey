@@ -1,4 +1,4 @@
-name: Deploy on many clouds
+name: Deploy on clouds
 
 on:
   push:
